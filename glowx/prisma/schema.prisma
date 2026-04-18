@@ -1,0 +1,264 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String?           @unique
+  emailVerified    DateTime?
+  phone            String?           @unique
+  phoneVerified    Boolean           @default(false)
+  name             String?
+  image            String?
+  role             Role              @default(FAN)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  accounts         Account[]
+  sessions         Session[]
+  creator          Creator?
+  subscriptions    Subscription[]
+  purchases        Purchase[]
+  sentMessages     Message[]         @relation("Sender")
+  receivedMessages Message[]         @relation("Receiver")
+  tips             Tip[]
+  pushSubs         PushSubscription[]
+  notifications    Notification[]
+  ageVerification  AgeVerification?
+}
+
+enum Role {
+  FAN
+  CREATOR
+  ADMIN
+}
+
+model Creator {
+  id             String             @id @default(cuid())
+  userId         String             @unique
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  handle         String             @unique
+  displayName    String
+  bio            String?            @db.Text
+  avatarUrl      String?
+  bannerUrl      String?
+  isVerified     Boolean            @default(false)
+  isActive       Boolean            @default(true)
+  twilioPhone    String?
+  paypalEmail    String?
+  category       String             @default("lifestyle")
+  socialLinks    Json?
+  createdAt      DateTime           @default(now())
+  tiers          SubscriptionTier[]
+  posts          Post[]
+  subscribers    Subscription[]
+  tipsReceived   Tip[]
+  payouts        Payout[]
+  scheduledPosts ScheduledPost[]
+  meshAssets     MeshAsset[]
+}
+
+model SubscriptionTier {
+  id           String         @id @default(cuid())
+  creatorId    String
+  creator      Creator        @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  name         String
+  price        Float
+  interval     String         @default("month")
+  perks        String[]
+  paypalPlanId String?
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id           String           @id @default(cuid())
+  fanId        String
+  fan          User             @relation(fields: [fanId], references: [id], onDelete: Cascade)
+  creatorId    String
+  creator      Creator          @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  tierId       String
+  tier         SubscriptionTier @relation(fields: [tierId], references: [id])
+  status       SubStatus        @default(ACTIVE)
+  paypalSubId  String?          @unique
+  startDate    DateTime         @default(now())
+  endDate      DateTime?
+  createdAt    DateTime         @default(now())
+}
+
+enum SubStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+}
+
+model Post {
+  id           String     @id @default(cuid())
+  creatorId    String
+  creator      Creator    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  title        String?
+  body         String?    @db.Text
+  mediaUrls    String[]
+  mediaTypes   String[]
+  isPPV        Boolean    @default(false)
+  ppvPrice     Float?
+  visibility   Visibility @default(SUBSCRIBERS)
+  publishedAt  DateTime?
+  meshAssetId  String?
+  meshAsset    MeshAsset? @relation(fields: [meshAssetId], references: [id])
+  purchases    Purchase[]
+  likes        Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+enum Visibility {
+  PUBLIC
+  SUBSCRIBERS
+  PPV
+}
+
+model ScheduledPost {
+  id          String   @id @default(cuid())
+  creatorId   String
+  creator     Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  title       String?
+  body        String?  @db.Text
+  mediaUrls   String[]
+  isPPV       Boolean  @default(false)
+  ppvPrice    Float?
+  platforms   String[]
+  scheduledAt DateTime
+  status      String   @default("pending")
+  results     Json?
+  jobId       String?
+  createdAt   DateTime @default(now())
+}
+
+model Purchase {
+  id            String   @id @default(cuid())
+  fanId         String
+  fan           User     @relation(fields: [fanId], references: [id], onDelete: Cascade)
+  postId        String
+  post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  amount        Float
+  paypalOrderId String   @unique
+  createdAt     DateTime @default(now())
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  sender     User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  body       String?  @db.Text
+  mediaUrl   String?
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Tip {
+  id            String   @id @default(cuid())
+  fanId         String
+  fan           User     @relation(fields: [fanId], references: [id], onDelete: Cascade)
+  creatorId     String
+  creator       Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  amount        Float
+  message       String?
+  paypalOrderId String   @unique
+  createdAt     DateTime @default(now())
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Payout {
+  id            String   @id @default(cuid())
+  creatorId     String
+  creator       Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  amount        Float
+  paypalBatchId String?
+  paypalEmail   String
+  status        String   @default("pending")
+  createdAt     DateTime @default(now())
+  processedAt   DateTime?
+}
+
+model AgeVerification {
+  id         String    @id @default(cuid())
+  userId     String    @unique
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified   Boolean   @default(false)
+  method     String?
+  verifiedAt DateTime?
+}
+
+model MeshAsset {
+  id        String   @id @default(cuid())
+  creatorId String
+  creator   Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  name      String
+  config    Json
+  glbUrl    String?
+  pngUrl    String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
