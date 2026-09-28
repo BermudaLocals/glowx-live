@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOWX — Where Creators Glow</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold2: #E8C97A;
+  --gold3: #8B6914;
+  --black: #050505;
+  --dark: #0A0A0A;
+  --dark2: #111111;
+  --dark3: #1A1A1A;
+  --dark4: #242424;
+  --white: #F5F0E8;
+  --white2: #D4C9B0;
+  --text: #8A8070;
+  --red: #C94C4C;
+  --green: #4CC98A;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.15s, width 0.2s, height 0.2s;
+  transform: translate(-50%, -50%);
+}
+
+/* Noise overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(5,5,5,0.95), transparent);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 8px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.nav-logo span {
+  font-style: italic;
+  color: var(--gold2);
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--white2);
+  text-decoration: none;
+  transition: color 0.3s;
+  font-weight: 500;
+}
+
+.nav-links a:hover { color: var(--gold); }
+
+.nav-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn-ghost {
+  padding: 10px 24px;
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: transparent;
+  cursor: none;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-ghost:hover {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold);
+}
+
+.btn-gold {
+  padding: 10px 28px;
+  background: linear-gradient(135deg, var(--gold), var(--gold3));
+  color: var(--black);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, var(--gold2), var(--gold));
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 48px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+}
+
+.hero-line {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.1), transparent);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid rgba(201,168,76,0.3);
+  margin-bottom: 40px;
+  animation: fadeUp 0.8s ease both;
+}
+
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-badge span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 300;
+  line-height: 0.95;
+  margin-bottom: 32px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-title .line2 {
+  display: block;
+  font-weight: 600;
+  letter-spacing: -2px;
+}
+
+.hero-sub {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--text);
+  max-width: 480px;
+  margin-bottom: 48px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.hero-stat {
+  margin-left: 32px;
+  padding-left: 32px;
+  border-left: 1px solid rgba(201,168,76,0.2);
+}
+
+.hero-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-top: 4px;
+  font-family: 'DM Mono', monospace;
+}
+
+.hero-right {
+  position: absolute;
+  right: 0;
+  top: 0; bottom: 0;
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1.2s 0.4s ease both;
+}
+
+.creator-stack {
+  position: relative;
+  width: 340px;
+  height: 500px;
+}
+
+.creator-card-hero {
+  position: absolute;
+  width: 200px;
+  border: 1px solid rgba(201,168,76,0.2);
+  background: var(--dark2);
+  overflow: hidden;
+  transition: transform 0.4s;
+}
+
+.creator-card-hero:nth-child(1) {
+  top: 0; left: 60px;
+  transform: rotate(-3deg);
+  z-index: 3;
+}
+
+.creator-card-hero:nth-child(2) {
+  top: 80px; left: 120px;
+  transform: rotate(2deg);
+  z-index: 2;
+}
+
+.creator-card-hero:nth-child(3) {
+  top: 160px; left: 20px;
+  transform: rotate(-1deg);
+  z-index: 1;
+}
+
+.creator-card-hero:hover { transform: rotate(0deg) scale(1.05) !important; z-index: 10; }
+
+.creator-card-img {
+  width: 100%;
+  height: 160px;
+  background: var(--dark3);
+  overflow: hidden;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+
+.creator-card-info {
+  padding: 12px;
+}
+
+.creator-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.creator-card-niche {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  margin-top: 2px;
+}
+
+.creator-card-payout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.payout-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--green);
+  letter-spacing: 1px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* STATS BAR */
+.stats-bar {
+  padding: 40px 48px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: var(--dark);
+}
+
+.stat-item {
+  padding: 24px 32px;
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--text);
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  margin-top: 6px;
+}
+
+/* SECTION */
+.section {
+  padding: 120px 48px;
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.section-title em { font-style: italic; color: var(--gold); }
+.section-title strong { font-weight: 600; }
+
+.section-sub {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.8;
+  max-width: 480px;
+  font-weight: 300;
+}
+
+/* FEATURES */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 80px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.1);
+}
+
+.feature-item {
+  background: var(--black);
+  padding: 48px 40px;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+
+.feature-item:hover { background: rgba(201,168,76,0.03); }
+.feature-item:hover::after { transform: scaleX(1); }
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.feature-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+
+.feature-desc {
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.feature-highlight {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+/* CREATORS SECTION */
+.creators-section {
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+.creators-header {
+  padding: 0 48px;
+  margin-bottom: 60px;
+}
+
+.creators-scroll {
+  display: flex;
+  gap: 24px;
+  padding: 0 48px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.creators-scroll::-webkit-scrollbar { display: none; }
+
+.creator-card {
+  flex-shrink: 0;
+  width: 260px;
+  border: 1px solid rgba(201,168,76,0.15);
+  background: var(--dark2);
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: none;
+}
+
+.creator-card:hover {
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.1);
+}
+
+.creator-img {
+  width: 100%;
+  height: 200px;
+  background: var(--dark3);
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+
+.creator-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--dark2), transparent);
+}
+
+.creator-live-badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: var(--red);
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.live-dot {
+  width: 5px; height: 5px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+
+.creator-body {
+  padding: 20px;
+}
+
+.creator-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.creator-niche {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.creator-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.creator-stat {
+  background: var(--dark3);
+  padding: 8px 12px;
+}
+
+.creator-stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.creator-stat-key {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.creator-subscribe {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: none;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.creator-subscribe:hover {
+  background: rgba(201,168,76,0.2);
+  border-color: var(--gold);
+}
+
+/* PAYOUT SECTION */
+.payout-section {
+  padding: 120px 48px;
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.payout-section::before {
+  content: '90%';
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20rem;
+  font-weight: 600;
+  color: rgba(201,168,76,0.04);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.payout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.payout-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.platform-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.platform-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--text);
+  text-transform: uppercase;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.platform-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: var(--dark3);
+  position: relative;
+}
+
+.platform-bar-fill {
+  height: 100%;
+  transition: width 1s ease;
+}
+
+.platform-bar-fill.glowx { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+.platform-bar-fill.onlyfans { background: rgba(255,255,255,0.15); }
+.platform-bar-fill.fanvue { background: rgba(255,255,255,0.12); }
+.platform-bar-fill.fansly { background: rgba(255,255,255,0.10); }
+
+.platform-pct {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  width: 50px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.platform-pct.glowx { color: var(--gold); }
+
+.payout-calc {
+  background: var(--dark2);
+  border: 1px solid rgba(201,168,76,0.2);
+  padding: 40px;
+}
+
+.calc-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.calc-label {
+  font-size: 0.75rem;
+  color: var(--text);
+  font-weight: 300;
+}
+
+.calc-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.calc-val.positive { color: var(--green); }
+.calc-val.negative { color: var(--red); }
+.calc-val.gold { color: var(--gold); }
+
+/* PRICING */
+.pricing-section {
+  padding: 120px 48px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 80px;
+}
+
+.pricing-card {
+  border: 1px solid rgba(201,168,76,0.15);
+  background: var(--dark2);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.pricing-card.featured {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, rgba(201,168,76,0.08), var(--dark2));
+}
+
+.pricing-card.featured::before {
+  content: 'MOST POPULAR';
+  position: absolute;
+  top: 20px; right: -30px;
+  background: var(--gold);
+  color: var(--black);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  padding: 4px 40px;
+  transform: rotate(45deg);
+  font-weight: 500;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201,168,76,0.4);
+}
+
+.pricing-tier {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.pricing-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pricing-price span {
+  font-size: 1.2rem;
+  color: var(--text);
+  font-weight: 300;
+}
+
+.pricing-period {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text);
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+.pricing-features {
+  list-style: none;
+  margin-bottom: 32px;
+}
+
+.pricing-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.8rem;
+  color: var(--white2);
+  font-weight: 300;
+}
+
+.pricing-features li::before {
+  content: '—';
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  flex-shrink: 0;
+}
+
+/* CTA SECTION */
+.cta-section {
+  padding: 160px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+}
+
+.cta-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-title em { font-style: italic; color: var(--gold); }
+
+.cta-sub {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-bottom: 48px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-gold-lg {
+  padding: 18px 48px;
+  background: linear-gradient(135deg, var(--gold), var(--gold3));
+  color: var(--black);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.btn-gold-lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(201,168,76,0.3);
+}
+
+.btn-ghost-lg {
+  padding: 18px 48px;
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: transparent;
+  cursor: none;
+  transition: all 0.3s;
+}
+
+.btn-ghost-lg:hover {
+  background: rgba(201,168,76,0.08);
+  border-color: var(--gold);
+}
+
+/* FOOTER */
+footer {
+  padding: 60px 48px 40px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  background: var(--dark);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+
+.footer-brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 6px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.footer-brand-desc {
+  font-size: 0.75rem;
+  color: var(--text);
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 280px;
+}
+
+.footer-col-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  font-size: 0.75rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.3s;
+  font-weight: 300;
+  cursor: none;
+}
+
+.footer-links a:hover { color: var(--white2); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5,5,5,0.95);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--dark2);
+  border: 1px solid rgba(201,168,76,0.3);
+  padding: 60px;
+  width: 480px;
+  max-width: 90vw;
+  transform: translateY(24px);
+  transition: transform 0.3s;
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0);
+}
+
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+
+.modal-sub {
+  font-size: 0.75rem;
+  color: var(--text);
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--dark3);
+  border: 1px solid rgba(201,168,76,0.15);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  transition: border-color 0.3s;
+  outline: none;
+  cursor: none;
+}
+
+.form-input:focus { border-color: rgba(201,168,76,0.5); }
+
+.form-submit {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--gold), var(--gold3));
+  color: var(--black);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border: none;
+  cursor: none;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: all 0.3s;
+}
+
+.form-submit:hover {
+  box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: none;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.modal-close:hover { color: var(--white); }
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.modal-switch {
+  font-size: 0.75rem;
+  color: var(--text);
+  margin-top: 20px;
+  text-align: center;
+}
+
+.modal-switch a {
+  color: var(--gold);
+  cursor: none;
+  text-decoration: none;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--dark2);
+  border: 1px solid rgba(201,168,76,0.3);
+  padding: 16px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  z-index: 600;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.4s;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .hero-right { display: none; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); padding: 0; }
+  .section { padding: 80px 24px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .payout-grid { grid-template-columns: 1fr; gap: 40px; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .cta-actions { flex-direction: column; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">GL<span>O</span>WX</div>
+  <ul class="nav-links">
+    <li><a href="#creators">Creators</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#payouts">Payouts</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost" onclick="openModal('login')">Sign In</button>
+    <button class="btn-gold" onclick="openModal('signup')">Join Free</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Now accepting creators — early access open</span>
+    </div>
+    <h1 class="hero-title">
+      Where creators<br>
+      <em>truly</em>
+      <span class="line2">get paid.</span>
+    </h1>
+    <p class="hero-sub">GLOWX is the creator platform built for those who refuse to settle. 90% payouts. Zero compromises. Your audience, your rules, your income.</p>
+    <div class="hero-actions">
+      <button class="btn-gold" onclick="openModal('signup')" style="padding:14px 36px;font-size:0.7rem;letter-spacing:3px;">Start Earning</button>
+      <button class="btn-ghost" onclick="document.getElementById('creators').scrollIntoView()" style="padding:14px 24px;">Browse Creators</button>
+      <div class="hero-stat">
+        <div class="hero-stat-num">90%</div>
+        <div class="hero-stat-label">Creator Payout</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="creator-stack">
+      <div class="creator-card-hero">
+        <div class="creator-card-img"><img src="https://i.pravatar.cc/150?img=1" alt="Luna Voss" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></div>
+        <div class="creator-card-info">
+          <div class="creator-card-name">Luna Voss</div>
+          <div class="creator-card-niche">Lifestyle</div>
+          <div class="creator-card-payout">
+            <span class="payout-badge">$29/mo</span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gold)">90% PAYOUT</span>
+          </div>
+        </div>
+      </div>
+      <div class="creator-card-hero">
+        <div class="creator-card-img"><img src="https://i.pravatar.cc/150?img=11" alt="Duke Drops" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></div>
+        <div class="creator-card-info">
+          <div class="creator-card-name">Duke Drops</div>
+          <div class="creator-card-niche">Luxury</div>
+          <div class="creator-card-payout">
+            <span class="payout-badge">$39/mo</span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gold)">90% PAYOUT</span>
+          </div>
+        </div>
+      </div>
+      <div class="creator-card-hero">
+        <div class="creator-card-img"><img src="https://i.pravatar.cc/150?img=5" alt="Velvet Vox" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></div>
+        <div class="creator-card-info">
+          <div class="creator-card-name">Velvet Vox</div>
+          <div class="creator-card-niche">Music</div>
+          <div class="creator-card-payout">
+            <span class="payout-badge">$29/mo</span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gold)">90% PAYOUT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">90%</div>
+    <div class="stat-label">Creator keeps</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">29+</div>
+    <div class="stat-label">Live creators</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">7</div>
+    <div class="stat-label">Platforms supported</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">$0</div>
+    <div class="stat-label">Setup fee</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-label">Why GLOWX</div>
+  <h2 class="section-title">Built for creators.<br><em>Not for platforms.</em></h2>
+  <p class="section-sub">Every feature designed to maximise your income and give you total control over your content and community.</p>
+  
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-icon">💰</div>
+      <div class="feature-title">90% Payouts. Always.</div>
+      <div class="feature-desc">The highest payout rate in the industry. No hidden fees, no surprise deductions. You earn it, you keep it. Paid weekly, directly to your account.</div>
+      <span class="feature-highlight">vs 80% industry standard</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Total Content Control</div>
+      <div class="feature-desc">Your content, your rules. Set your own prices, choose your subscribers, control your DMs. GLOWX never interferes with your creative vision.</div>
+      <span class="feature-highlight">Full ownership</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Multi-Platform Posting</div>
+      <div class="feature-desc">Post once, publish everywhere. GLOWX syncs with TikTok, Instagram, Twitter and more. Your content reaches maximum audience automatically.</div>
+      <span class="feature-highlight">7 platforms connected</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💬</div>
+      <div class="feature-title">AI-Powered DMs</div>
+      <div class="feature-desc">Never miss a fan message. Our AI handles your DMs 24/7, drives upsells, and keeps your subscribers engaged even while you sleep.</div>
+      <span class="feature-highlight">24/7 engagement</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Real-Time Analytics</div>
+      <div class="feature-desc">Know exactly what's working. Revenue by content type, subscriber lifetime value, best posting times — data that actually helps you earn more.</div>
+      <span class="feature-highlight">Deep insights</span>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🎁</div>
+      <div class="feature-title">Live & Gifting</div>
+      <div class="feature-desc">Go live and earn in real time. Fans send gifts, trigger events, and tip — with 90% going straight to your wallet. Best live monetisation in the game.</div>
+      <span class="feature-highlight">Real-time earnings</span>
+    </div>
+  </div>
+</section>
+
+<!-- CREATORS -->
+<section class="creators-section" id="creators">
+  <div class="creators-header">
+    <div class="section-label">Featured Creators</div>
+    <h2 class="section-title">Meet the <em>talent.</em></h2>
+  </div>
+  <div class="creators-scroll" id="creatorsScroll">
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=1" alt="Luna Voss" style="width:100%;height:100%;object-fit:cover">
+        <div class="creator-img-overlay"></div>
+        <div class="creator-live-badge"><div class="live-dot"></div> LIVE</div>
+      </div>
+      <div class="creator-body">
+        <div class="creator-name">Luna Voss</div>
+        <div class="creator-niche">Lifestyle & Fashion</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$29</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">12.4K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=11" alt="Duke Drops" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Duke Drops</div>
+        <div class="creator-niche">Luxury Lifestyle</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$39</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">8.2K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=9" alt="Crypto Kai" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Crypto Kai</div>
+        <div class="creator-niche">Crypto & DeFi</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$49</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">22.1K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=5" alt="Velvet Vox" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Velvet Vox</div>
+        <div class="creator-niche">Music & Voice</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$29</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">5.8K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=16" alt="Marcus Fit" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Marcus Fit</div>
+        <div class="creator-niche">Bodybuilding</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$34</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">18.7K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=20" alt="Sage Rivers" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Sage Rivers</div>
+        <div class="creator-niche">Yoga & Wellness</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$24</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">9.3K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=25" alt="Nova Games" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Nova Games</div>
+        <div class="creator-niche">Gaming & Esports</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$15</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">31.2K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-img"><img src="https://i.pravatar.cc/150?img=32" alt="Fashion Femi" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="creator-body">
+        <div class="creator-name">Fashion Femi</div>
+        <div class="creator-niche">Fashion & Beauty</div>
+        <div class="creator-stats">
+          <div class="creator-stat"><div class="creator-stat-val">$19</div><div class="creator-stat-key">Per month</div></div>
+          <div class="creator-stat"><div class="creator-stat-val">14.5K</div><div class="creator-stat-key">Subscribers</div></div>
+        </div>
+        <button class="creator-subscribe" onclick="openModal('signup')">Subscribe ✦</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYOUT SECTION -->
+<section class="payout-section" id="payouts">
+  <div class="payout-grid">
+    <div>
+      <div class="section-label">The Difference</div>
+      <h2 class="section-title">You deserve <em>more</em><br><strong>of your money.</strong></h2>
+      <p class="section-sub" style="margin-bottom:0">Every other platform takes a bigger cut. GLOWX gives creators the best deal in the industry — because your work deserves maximum reward.</p>
+      <div class="payout-comparison">
+        <div class="platform-row">
+          <div class="platform-name">GLOWX</div>
+          <div class="platform-bar-bg"><div class="platform-bar-fill glowx" style="width:90%"></div></div>
+          <div class="platform-pct glowx">90%</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">OnlyFans</div>
+          <div class="platform-bar-bg"><div class="platform-bar-fill onlyfans" style="width:80%"></div></div>
+          <div class="platform-pct" style="color:var(--text)">80%</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">Fanvue</div>
+          <div class="platform-bar-bg"><div class="platform-bar-fill fanvue" style="width:85%"></div></div>
+          <div class="platform-pct" style="color:var(--text)">85%</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">Fansly</div>
+          <div class="platform-bar-bg"><div class="platform-bar-fill fansly" style="width:80%"></div></div>
+          <div class="platform-pct" style="color:var(--text)">80%</div>
+        </div>
+      </div>
+    </div>
+    <div class="payout-calc">
+      <div class="calc-title">Monthly Calculator — $10,000 Revenue</div>
+      <div class="calc-row">
+        <div class="calc-label">Your gross revenue</div>
+        <div class="calc-val gold">$10,000</div>
+      </div>
+      <div class="calc-row">
+        <div class="calc-label">GLOWX fee (10%)</div>
+        <div class="calc-val negative">-$1,000</div>
+      </div>
+      <div class="calc-row" style="border-bottom:2px solid rgba(201,168,76,0.3)">
+        <div class="calc-label">OnlyFans fee (20%)</div>
+        <div class="calc-val" style="color:rgba(255,255,255,0.3)">-$2,000</div>
+      </div>
+      <div class="calc-row">
+        <div class="calc-label" style="font-weight:600;color:var(--white)">You keep with GLOWX</div>
+        <div class="calc-val positive">$9,000</div>
+      </div>
+      <div class="calc-row">
+        <div class="calc-label">You keep with OnlyFans</div>
+        <div class="calc-val" style="color:rgba(255,255,255,0.3)">$8,000</div>
+      </div>
+      <div style="margin-top:24px;padding:16px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2)">
+        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;color:var(--gold);margin-bottom:4px">GLOWX ADVANTAGE</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:var(--green)">+$1,000/month</div>
+        <div style="font-size:0.7rem;color:var(--text);margin-top:4px">extra in your pocket vs OnlyFans</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-label">For Creators</div>
+  <h2 class="section-title">Simple, <em>transparent</em><br><strong>pricing.</strong></h2>
+  <p class="section-sub">Start free. Scale as you grow. No hidden fees, no surprises.</p>
+  
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-price">$0<span>/mo</span></div>
+      <div class="pricing-period">Forever free</div>
+      <ul class="pricing-features">
+        <li>Up to 100 subscribers</li>
+        <li>Basic analytics</li>
+        <li>Photo & video posts</li>
+        <li>DM messaging</li>
+        <li>90% payout rate</li>
+      </ul>
+      <button class="btn-ghost" style="width:100%;padding:14px;font-size:0.65rem;letter-spacing:2px;" onclick="openModal('signup')">Get Started Free</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-tier">Creator</div>
+      <div class="pricing-price">$19<span>/mo</span></div>
+      <div class="pricing-period">Billed monthly</div>
+      <ul class="pricing-features">
+        <li>Unlimited subscribers</li>
+        <li>Advanced analytics</li>
+        <li>Live streaming + gifts</li>
+        <li>AI DM assistant</li>
+        <li>Multi-platform posting</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="btn-gold" style="width:100%;padding:14px;font-size:0.65rem;letter-spacing:2px;" onclick="openModal('signup')">Start Creator Plan</button>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Pro</div>
+      <div class="pricing-price">$49<span>/mo</span></div>
+      <div class="pricing-period">Billed monthly</div>
+      <ul class="pricing-features">
+        <li>Everything in Creator</li>
+        <li>WhatsApp engine</li>
+        <li>Phone line access</li>
+        <li>Brand deal matching</li>
+        <li>Custom domain</li>
+        <li>Dedicated manager</li>
+      </ul>
+      <button class="btn-ghost" style="width:100%;padding:14px;font-size:0.65rem;letter-spacing:2px;" onclick="openModal('signup')">Go Pro</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="text-align:center">Ready?</div>
+  <h2 class="cta-title">Start earning<br><em>what you deserve.</em></h2>
+  <p class="cta-sub">Join thousands of creators already earning 90% on GLOWX.<br>Set up in minutes. First payout in 7 days.</p>
+  <div class="cta-actions">
+    <button class="btn-gold-lg" onclick="openModal('signup')">Create Your Page</button>
+    <button class="btn-ghost-lg" onclick="openModal('login')">Sign In</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">GLOWX</div>
+      <div class="footer-brand-desc">The creator platform that puts creators first. 90% payouts, real tools, and a community built for growth.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#">Browse Creators</a></li>
+        <li><a href="#">How it Works</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Live Streams</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Creators</div>
+      <ul class="footer-links">
+        <li><a href="#">Start Creating</a></li>
+        <li><a href="#">Creator Guide</a></li>
+        <li><a href="#">Payouts</a></li>
+        <li><a href="#">Analytics</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About GLOWX</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 GLOWX. All rights reserved. Dollar Double Empire.</div>
+    <div class="footer-copy">Where creators glow.</div>
+  </div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">Welcome back.</h3>
+        <p class="modal-sub">Sign in to your GLOWX account</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('login')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="you@email.com" id="loginEmail">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" placeholder="••••••••" id="loginPassword">
+    </div>
+    <button class="form-submit" onclick="handleLogin()">Sign In</button>
+    <p class="modal-switch">Don't have an account? <a onclick="closeModal('login');openModal('signup')">Create one free</a></p>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">Start glowing.</h3>
+        <p class="modal-sub">Create your free GLOWX account</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('signup')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <input type="text" class="form-input" placeholder="Your name" id="signupName">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="you@email.com" id="signupEmail">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" placeholder="Create a password" id="signupPassword">
+    </div>
+    <div class="form-group">
+      <label class="form-label">I am joining as</label>
+      <select class="form-input" id="signupRole" style="appearance:none;cursor:none">
+        <option value="creator">Creator — I want to earn</option>
+        <option value="fan">Fan — I want to subscribe</option>
+      </select>
+    </div>
+    <button class="form-submit" onclick="handleSignup()">Create Account — It's Free</button>
+    <p class="modal-switch">Already have an account? <a onclick="closeModal('signup');openModal('login')">Sign in</a></p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('button, a, input, select').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    cursorRing.style.width = '48px';
+    cursorRing.style.height = '48px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursorRing.style.width = '32px';
+    cursorRing.style.height = '32px';
+  });
+});
+
+// Modal
+function openModal(type) {
+  document.getElementById(type + 'Modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(type) {
+  document.getElementById(type + 'Modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+// Toast
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// API
+const API = 'https://ai-influencer-studio-production.up.railway.app/api';
+
+async function handleSignup() {
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  if (!email || !password || !name) { showToast('Please fill all fields'); return; }
+  try {
+    const res = await fetch(API + '/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password, name})
+    });
+    const data = await res.json();
+    if (data.token) {
+      localStorage.setItem('glowx_token', data.token);
+      closeModal('signup');
+      showToast('Welcome to GLOWX! ✦');
+    } else {
+      showToast(data.error || 'Registration failed');
+    }
+  } catch(e) {
+    showToast('Connection error. Try again.');
+  }
+}
+
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { showToast('Please fill all fields'); return; }
+  try {
+    const res = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password})
+    });
+    const data = await res.json();
+    if (data.token) {
+      localStorage.setItem('glowx_token', data.token);
+      closeModal('login');
+      showToast('Welcome back ✦');
+    } else {
+      showToast(data.error || 'Login failed');
+    }
+  } catch(e) {
+    showToast('Connection error. Try again.');
+  }
+}
+
+// Animate stats on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-item, .creator-card, .pricing-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(32px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

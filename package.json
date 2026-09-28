@@ -1,5 +1,23 @@
-{
+﻿{
+  "name": "glowx-live",
+  "version": "1.0.0",
+  "description": "GlowX - Fanvue-like platform with realistic synthetic personas + paid builder",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node server/index.js",
+    "start:next": "next start"
+  },
   "dependencies": {
-    "next": "^14.2.35"
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }

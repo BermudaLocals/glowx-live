@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOWX — The Platform OnlyFans Wishes It Was</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold2: #E8C97A;
+  --gold3: #8B6914;
+  --black: #050505;
+  --dark: #0A0A0A;
+  --dark2: #111111;
+  --dark3: #1A1A1A;
+  --dark4: #242424;
+  --white: #F5F0E8;
+  --white2: #D4C9B0;
+  --text: #8A8070;
+  --red: #C94C4C;
+  --green: #4CC98A;
+  --blue: #4C8AC9;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--black); color:var(--white); font-family:'Montserrat',sans-serif; overflow-x:hidden; cursor:none; }
+.cursor { width:8px; height:8px; background:var(--gold); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform 0.1s; }
+.cursor-ring { width:32px; height:32px; border:1px solid rgba(201,168,76,0.4); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width 0.2s, height 0.2s; }
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:1000; opacity:0.4; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:24px 48px; display:flex; align-items:center; justify-content:space-between; background:linear-gradient(to bottom,rgba(5,5,5,0.97),transparent); backdrop-filter:blur(8px); }
+.nav-logo { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; letter-spacing:8px; color:var(--gold); text-transform:uppercase; }
+.nav-logo span { font-style:italic; color:var(--gold2); }
+.nav-links { display:flex; gap:40px; list-style:none; }
+.nav-links a { font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--white2); text-decoration:none; transition:color 0.3s; font-weight:500; cursor:none; }
+.nav-links a:hover { color:var(--gold); }
+.btn-ghost { padding:10px 24px; border:1px solid rgba(201,168,76,0.3); color:var(--gold); font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; background:transparent; cursor:none; transition:all 0.3s; }
+.btn-ghost:hover { background:rgba(201,168,76,0.1); border-color:var(--gold); }
+.btn-gold { padding:10px 28px; background:linear-gradient(135deg,var(--gold),var(--gold3)); color:var(--black); font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; border:none; cursor:none; transition:all 0.3s; font-weight:500; }
+.btn-gold:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(201,168,76,0.3); }
+
+/* HERO */
+.hero { min-height:100vh; display:flex; align-items:center; position:relative; overflow:hidden; padding:120px 48px 80px; }
+.hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 60% 50%,rgba(201,168,76,0.07) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(201,168,76,0.04) 0%,transparent 60%); }
+.hero-content { position:relative; z-index:2; max-width:760px; }
+.hero-badge { display:inline-flex; align-items:center; gap:8px; padding:6px 16px; border:1px solid rgba(201,168,76,0.3); margin-bottom:32px; animation:fadeUp 0.8s ease both; }
+.badge-dot { width:6px; height:6px; background:var(--gold); border-radius:50%; animation:pulse 2s infinite; }
+.hero-badge span { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; }
+.hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(3.5rem,7vw,6.5rem); font-weight:300; line-height:0.95; margin-bottom:28px; animation:fadeUp 0.8s 0.1s ease both; }
+.hero-title em { font-style:italic; color:var(--gold); }
+.hero-title strong { font-weight:600; display:block; }
+.hero-title .strike { text-decoration:line-through; color:var(--text); font-size:0.7em; }
+.hero-sub { font-size:0.9rem; line-height:1.8; color:var(--white2); max-width:580px; margin-bottom:16px; font-weight:300; animation:fadeUp 0.8s 0.2s ease both; }
+.hero-sub2 { font-size:0.8rem; line-height:1.8; color:var(--text); max-width:560px; margin-bottom:40px; font-weight:300; animation:fadeUp 0.8s 0.25s ease both; }
+.hero-actions { display:flex; gap:16px; align-items:center; flex-wrap:wrap; animation:fadeUp 0.8s 0.3s ease both; }
+.hero-pills { display:flex; gap:12px; margin-top:32px; flex-wrap:wrap; animation:fadeUp 0.8s 0.4s ease both; }
+.pill { padding:6px 14px; border:1px solid rgba(201,168,76,0.2); font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--text); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+.pill .pill-icon { color:var(--gold); font-size:0.7rem; }
+
+/* NO COMPETITION BANNER */
+.no-comp-banner { background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.04)); border-top:1px solid rgba(201,168,76,0.3); border-bottom:1px solid rgba(201,168,76,0.3); padding:20px 48px; display:flex; align-items:center; justify-content:center; gap:16px; overflow:hidden; position:relative; }
+.no-comp-banner::before { content:''; position:absolute; left:-100%; top:0; bottom:0; width:100%; background:linear-gradient(90deg,transparent,rgba(201,168,76,0.05),transparent); animation:shimmer 3s infinite; }
+@keyframes shimmer { to { left:100%; } }
+.banner-text { font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; }
+.banner-sep { color:rgba(201,168,76,0.3); font-size:1rem; }
+
+/* COMPARISON TABLE */
+.comparison-section { padding:120px 48px; background:var(--dark); }
+.section-label { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; margin-bottom:16px; }
+.section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.5rem,4vw,4rem); font-weight:300; line-height:1.1; margin-bottom:24px; }
+.section-title em { font-style:italic; color:var(--gold); }
+.section-title strong { font-weight:600; }
+.section-sub { font-size:0.85rem; color:var(--text); line-height:1.8; max-width:560px; margin-bottom:64px; font-weight:300; }
+
+.comp-table { width:100%; border-collapse:collapse; }
+.comp-table th { padding:20px 24px; font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; border-bottom:2px solid rgba(201,168,76,0.2); text-align:center; }
+.comp-table th.glowx-col { background:rgba(201,168,76,0.08); border-bottom:2px solid var(--gold); color:var(--gold); font-size:0.7rem; }
+.comp-table th.feature-col { text-align:left; color:var(--text); }
+.comp-table td { padding:18px 24px; border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.8rem; text-align:center; color:var(--text); font-weight:300; }
+.comp-table td.feature-name { text-align:left; color:var(--white2); font-weight:400; font-size:0.82rem; }
+.comp-table td.glowx-col { background:rgba(201,168,76,0.04); }
+.comp-table tr:hover td { background:rgba(255,255,255,0.02); }
+.comp-table tr:hover td.glowx-col { background:rgba(201,168,76,0.08); }
+.check { color:var(--green); font-size:1.1rem; }
+.cross { color:var(--red); font-size:1.1rem; }
+.partial { color:var(--gold); font-size:0.7rem; font-family:'DM Mono',monospace; letter-spacing:1px; }
+.glowx-winner { color:var(--gold); font-weight:600; font-size:0.85rem; }
+
+.winner-badge { display:inline-block; background:linear-gradient(135deg,var(--gold),var(--gold3)); color:var(--black); font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:2px; padding:4px 12px; font-weight:600; margin-bottom:8px; }
+
+/* FEATURE BLAST */
+.features-section { padding:120px 48px; }
+.features-intro { max-width:600px; margin-bottom:80px; }
+.features-mega { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.1); }
+.feat { background:var(--black); padding:40px 32px; transition:background 0.3s; position:relative; overflow:hidden; }
+.feat::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); transform:scaleX(0); transition:transform 0.4s; }
+.feat:hover { background:rgba(201,168,76,0.03); }
+.feat:hover::before { transform:scaleX(1); }
+.feat-icon { font-size:2rem; margin-bottom:20px; }
+.feat-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; margin-bottom:10px; color:var(--white); }
+.feat-desc { font-size:0.75rem; color:var(--text); line-height:1.7; font-weight:300; margin-bottom:12px; }
+.feat-tag { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--gold); display:inline-block; padding:3px 8px; border:1px solid rgba(201,168,76,0.2); }
+.feat-exclusive { position:absolute; top:12px; right:12px; background:var(--gold); color:var(--black); font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:2px; padding:3px 8px; font-weight:600; }
+
+/* PROOF SECTION */
+.proof-section { padding:100px 48px; background:var(--dark); }
+.proof-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:64px; }
+.proof-card { border:1px solid rgba(201,168,76,0.15); background:var(--dark2); padding:36px; position:relative; }
+.proof-quote { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; line-height:1.7; color:var(--white2); margin-bottom:24px; }
+.proof-quote::before { content:'"'; font-size:3rem; color:var(--gold); line-height:0; vertical-align:-1rem; margin-right:4px; font-style:normal; }
+.proof-author { display:flex; align-items:center; gap:12px; }
+.proof-avatar { width:40px; height:40px; background:var(--dark3); border:1px solid rgba(201,168,76,0.2); display:flex; align-items:center; justify-content:center; font-size:1.2rem; border-radius:50%; }
+.proof-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; }
+.proof-role { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--gold); text-transform:uppercase; }
+.proof-earnings { position:absolute; top:20px; right:20px; text-align:right; }
+.proof-earnings-val { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--green); }
+.proof-earnings-label { font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:2px; color:var(--text); text-transform:uppercase; }
+
+/* PAYOUT */
+.payout-section { padding:120px 48px; position:relative; overflow:hidden; }
+.payout-section::before { content:'80%'; position:absolute; right:-60px; top:50%; transform:translateY(-50%); font-family:'Cormorant Garamond',serif; font-size:22rem; font-weight:600; color:rgba(201,168,76,0.03); pointer-events:none; line-height:1; }
+.payout-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.platform-comparison { display:flex; flex-direction:column; gap:16px; margin-top:48px; }
+.plat-row { display:flex; align-items:center; gap:16px; }
+.plat-name { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--text); text-transform:uppercase; width:130px; flex-shrink:0; }
+.plat-bar-bg { flex:1; height:6px; background:var(--dark3); position:relative; overflow:hidden; }
+.plat-fill { height:100%; transition:width 1.5s ease; border-radius:0; }
+.plat-fill.glowx { background:linear-gradient(90deg,var(--gold),var(--gold2)); }
+.plat-fill.of { background:rgba(255,255,255,0.12); }
+.plat-fill.fv { background:rgba(255,255,255,0.12); }
+.plat-fill.fs { background:rgba(255,255,255,0.12); }
+.plat-pct { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:600; width:50px; text-align:right; flex-shrink:0; }
+.plat-pct.glowx { color:var(--gold); }
+
+.calc-box { background:var(--dark2); border:1px solid rgba(201,168,76,0.2); padding:40px; }
+.calc-title { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:32px; }
+.calc-row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.calc-label { font-size:0.75rem; color:var(--text); font-weight:300; }
+.calc-val { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; }
+.pos { color:var(--green); }
+.neg { color:var(--red); }
+.gld { color:var(--gold); }
+.advantage-box { margin-top:24px; padding:20px; background:rgba(76,201,138,0.08); border:1px solid rgba(76,201,138,0.2); }
+.adv-label { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--green); margin-bottom:4px; }
+.adv-val { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:600; color:var(--green); }
+.adv-sub { font-size:0.7rem; color:var(--text); margin-top:4px; }
+
+/* VIDEO ADS SECTION */
+.video-ads-section { padding:120px 48px; background:var(--dark); }
+.ads-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:64px; }
+.ad-card { border:1px solid rgba(201,168,76,0.15); background:var(--dark2); overflow:hidden; transition:all 0.3s; }
+.ad-card:hover { border-color:rgba(201,168,76,0.4); transform:translateY(-4px); }
+.ad-header { padding:24px; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; justify-content:space-between; align-items:center; }
+.ad-type { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; }
+.ad-duration { font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--text); }
+.ad-body { padding:24px; }
+.ad-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; margin-bottom:16px; }
+.ad-script { font-size:0.75rem; color:var(--text); line-height:1.8; font-weight:300; white-space:pre-line; }
+.ad-script .hook { color:var(--gold); font-weight:500; }
+.ad-script .cta { color:var(--green); font-weight:500; }
+.ad-script .pain { color:var(--red); }
+.ad-platform { display:flex; gap:8px; padding:16px 24px; border-top:1px solid rgba(255,255,255,0.04); flex-wrap:wrap; }
+.platform-tag { font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:2px; color:var(--text); padding:3px 8px; border:1px solid rgba(255,255,255,0.08); text-transform:uppercase; }
+
+/* CTA */
+.cta-section { padding:160px 48px; text-align:center; position:relative; overflow:hidden; }
+.cta-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.07) 0%,transparent 70%); }
+.cta-title { font-family:'Cormorant Garamond',serif; font-size:clamp(3rem,6vw,6rem); font-weight:300; line-height:1; margin-bottom:24px; position:relative; z-index:1; }
+.cta-title em { font-style:italic; color:var(--gold); }
+.cta-sub { font-size:0.85rem; color:var(--text); margin-bottom:48px; font-weight:300; position:relative; z-index:1; line-height:1.8; }
+.cta-actions { display:flex; gap:16px; justify-content:center; position:relative; z-index:1; }
+.btn-gold-lg { padding:18px 52px; background:linear-gradient(135deg,var(--gold),var(--gold3)); color:var(--black); font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; border:none; cursor:none; transition:all 0.3s; font-weight:500; }
+.btn-gold-lg:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(201,168,76,0.3); }
+.btn-ghost-lg { padding:18px 48px; border:1px solid rgba(201,168,76,0.3); color:var(--gold); font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; background:transparent; cursor:none; transition:all 0.3s; }
+.btn-ghost-lg:hover { background:rgba(201,168,76,0.08); border-color:var(--gold); }
+
+/* FOOTER */
+footer { padding:60px 48px 40px; border-top:1px solid rgba(255,255,255,0.04); background:var(--dark); }
+.footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:60px; margin-bottom:60px; }
+.footer-logo { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; letter-spacing:6px; color:var(--gold); text-transform:uppercase; margin-bottom:16px; }
+.footer-desc { font-size:0.75rem; color:var(--text); line-height:1.8; font-weight:300; max-width:280px; }
+.footer-col-title { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:20px; }
+.footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-links a { font-size:0.75rem; color:var(--text); text-decoration:none; transition:color 0.3s; font-weight:300; cursor:none; }
+.footer-links a:hover { color:var(--white2); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; padding-top:32px; border-top:1px solid rgba(255,255,255,0.04); }
+.footer-copy { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--text); letter-spacing:2px; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(5,5,5,0.95); z-index:500; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.modal-overlay.active { opacity:1; pointer-events:all; }
+.modal { background:var(--dark2); border:1px solid rgba(201,168,76,0.3); padding:60px; width:480px; max-width:90vw; transform:translateY(24px); transition:transform 0.3s; }
+.modal-overlay.active .modal { transform:translateY(0); }
+.modal-title { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; margin-bottom:8px; }
+.modal-sub { font-size:0.75rem; color:var(--text); margin-bottom:40px; font-weight:300; }
+.modal-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+.form-group { margin-bottom:20px; }
+.form-label { display:block; font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:8px; }
+.form-input { width:100%; padding:14px 16px; background:var(--dark3); border:1px solid rgba(201,168,76,0.15); color:var(--white); font-family:'Montserrat',sans-serif; font-size:0.85rem; font-weight:300; transition:border-color 0.3s; outline:none; cursor:none; }
+.form-input:focus { border-color:rgba(201,168,76,0.5); }
+.form-submit { width:100%; padding:16px; background:linear-gradient(135deg,var(--gold),var(--gold3)); color:var(--black); font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; border:none; cursor:none; font-weight:500; margin-top:8px; transition:all 0.3s; }
+.form-submit:hover { box-shadow:0 8px 24px rgba(201,168,76,0.3); }
+.modal-switch { font-size:0.75rem; color:var(--text); margin-top:20px; text-align:center; }
+.modal-switch a { color:var(--gold); cursor:none; text-decoration:none; }
+.toast { position:fixed; bottom:32px; right:32px; background:var(--dark2); border:1px solid rgba(201,168,76,0.3); padding:16px 24px; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; color:var(--gold); z-index:600; transform:translateY(80px); opacity:0; transition:all 0.4s; }
+.toast.show { transform:translateY(0); opacity:1; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+@media(max-width:768px) {
+  nav { padding:20px 24px; }
+  .nav-links { display:none; }
+  .hero { padding:100px 24px 60px; }
+  .comparison-section,.features-section,.payout-section,.proof-section,.video-ads-section,.cta-section { padding:80px 24px; }
+  .features-mega { grid-template-columns:1fr 1fr; }
+  .proof-grid,.ads-grid { grid-template-columns:1fr; }
+  .payout-grid { grid-template-columns:1fr; gap:40px; }
+  .footer-top { grid-template-columns:1fr; gap:32px; }
+  .cta-actions { flex-direction:column; align-items:center; }
+  .comp-table { font-size:0.7rem; }
+  .comp-table th,.comp-table td { padding:12px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">GL<span>O</span>WX</div>
+  <ul class="nav-links">
+    <li><a href="#comparison">vs. Competitors</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#payouts">Payouts</a></li>
+    <li><a href="#ads">Ad Scripts</a></li>
+  </ul>
+  <div style="display:flex;gap:12px;">
+    <button class="btn-ghost" onclick="openModal('login')">Sign In</button>
+    <button class="btn-gold" onclick="openModal('signup')">Start Free</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span>The platform OnlyFans wishes it was</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="strike">Same payout.</span><br>
+      <em>Ten times</em>
+      <strong>the platform.</strong>
+    </h1>
+    <p class="hero-sub">GLOWX gives you 80% — same as OnlyFans. But then we give you everything else they don't.</p>
+    <p class="hero-sub2">AI-powered DMs that earn while you sleep. WhatsApp access for premium fans. Multi-platform posting in one click. Live streaming with real-time gifts. Phone lines. Toy control. Analytics that actually mean something.</p>
+    <div class="hero-actions">
+      <button class="btn-gold" onclick="openModal('signup')" style="padding:16px 40px;font-size:0.72rem;letter-spacing:3px;">Start Earning Free</button>
+      <button class="btn-ghost" onclick="document.getElementById('comparison').scrollIntoView({behavior:'smooth'})" style="padding:16px 28px;">See Why We Win</button>
+    </div>
+    <div class="hero-pills">
+      <div class="pill"><span class="pill-icon">✦</span> 80% payout</div>
+      <div class="pill"><span class="pill-icon">✦</span> AI DMs 24/7</div>
+      <div class="pill"><span class="pill-icon">✦</span> WhatsApp Engine</div>
+      <div class="pill"><span class="pill-icon">✦</span> Multi-platform post</div>
+      <div class="pill"><span class="pill-icon">✦</span> Live + gifts</div>
+      <div class="pill"><span class="pill-icon">✦</span> Phone lines</div>
+      <div class="pill"><span class="pill-icon">✦</span> Toy control API</div>
+      <div class="pill"><span class="pill-icon">✦</span> Zero setup fee</div>
+    </div>
+  </div>
+</section>
+
+<!-- NO COMPETITION BANNER -->
+<div class="no-comp-banner">
+  <span class="banner-text">80% payout</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">AI DMs</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">WhatsApp engine</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">Multi-platform</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">Live gifts</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">Phone lines</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">Toy integration</span>
+  <span class="banner-sep">✦</span>
+  <span class="banner-text">No competition</span>
+</div>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison-section" id="comparison">
+  <div class="section-label">Feature Comparison</div>
+  <h2 class="section-title">There is <em>no competition.</em><br><strong>Here's the proof.</strong></h2>
+  <p class="section-sub">We looked at every major creator platform. None of them come close. This isn't marketing — it's a feature list. Check for yourself.</p>
+
+  <div style="overflow-x:auto;">
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th class="feature-col">Feature</th>
+        <th class="glowx-col">
+          <div class="winner-badge">WINNER</div><br>GLOWX
+        </th>
+        <th>OnlyFans</th>
+        <th>Fanvue</th>
+        <th>Fansly</th>
+        <th>Patreon</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="feature-name">Creator payout rate</td>
+        <td class="glowx-col glowx-winner">80%</td>
+        <td>80%</td>
+        <td>80%</td>
+        <td>80%</td>
+        <td>88–95%*</td>
+      </tr>
+      <tr>
+        <td class="feature-name">🤖 AI-powered DMs (24/7 auto-reply)</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="partial">BASIC</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">📱 Multi-platform auto-posting</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">💬 WhatsApp fan access engine</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">📞 Phone line (per-minute billing)</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">🎁 Live streaming with real-time gifts</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="partial">LIMITED</span></td>
+        <td><span class="partial">LIMITED</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">🎮 Toy / device control integration</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">📊 Advanced creator analytics</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="partial">BASIC</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="partial">BASIC</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">🧠 AI content scheduler</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="partial">BASIC</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">💰 Upsell automation engine</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">🌍 7-platform simultaneous publishing</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">🎵 AI voice & music generation</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">🔄 Retention & re-engagement engine</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td class="feature-name">Zero setup fee</td>
+        <td class="glowx-col"><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="margin-top:32px;padding:24px 32px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:space-between;flex-wrap:gap">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:var(--gold);margin-bottom:8px;">GLOWX EXCLUSIVE FEATURES</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;">9 features no competitor offers.</div>
+    </div>
+    <button class="btn-gold" onclick="openModal('signup')" style="padding:14px 32px;white-space:nowrap;">Get All Features Free</button>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="features-intro">
+    <div class="section-label">What You Get</div>
+    <h2 class="section-title">Every tool you<br>need to <em>dominate.</em></h2>
+    <p style="font-size:0.85rem;color:var(--text);line-height:1.8;font-weight:300;">Built by creators who were tired of platforms that take your money and give you nothing back. Every feature below exists on GLOWX and nowhere else.</p>
+  </div>
+  <div class="features-mega">
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">🤖</div>
+      <div class="feat-title">AI DMs — 24/7</div>
+      <div class="feat-desc">Your AI replies to every fan message, drives PPV sales, and upsells subscriptions automatically. Earn while you sleep. No competitor has this.</div>
+      <span class="feat-tag">Not on OnlyFans</span>
+    </div>
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">💬</div>
+      <div class="feat-title">WhatsApp Engine</div>
+      <div class="feat-desc">Give premium fans WhatsApp access at $19+/mo. Voice notes, messages, group access — all billed automatically. OnlyFans doesn't touch this.</div>
+      <span class="feat-tag">Not on any platform</span>
+    </div>
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">📞</div>
+      <div class="feat-title">Phone Lines</div>
+      <div class="feat-desc">Real phone calls billed per minute. Fans pay $1.99–$3.99/min to hear your voice. Fully automated billing, no awkward payment requests.</div>
+      <span class="feat-tag">Not on any platform</span>
+    </div>
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">🌍</div>
+      <div class="feat-title">Multi-Platform Posting</div>
+      <div class="feat-desc">Post once on GLOWX, publish simultaneously to TikTok, Instagram, Twitter, YouTube, and more. One workflow. Maximum reach.</div>
+      <span class="feat-tag">Not on OnlyFans/Fanvue</span>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎁</div>
+      <div class="feat-title">Live + Real-Time Gifts</div>
+      <div class="feat-desc">Go live and earn instantly. Fans send gifts from $0.01 to $100 per gift. 80% lands in your wallet in real time. Better than Twitch, better than TikTok Live.</div>
+      <span class="feat-tag">Superior to competitors</span>
+    </div>
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">🎮</div>
+      <div class="feat-title">Toy Integration</div>
+      <div class="feat-desc">Connect Lovense and other devices. Fans trigger events with tips. Fully automated, fully private, fully yours. No platform does this.</div>
+      <span class="feat-tag">Not on any platform</span>
+    </div>
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">💰</div>
+      <div class="feat-title">Upsell Engine</div>
+      <div class="feat-desc">AI identifies when a fan is ready to upgrade and sends the perfect upsell at the perfect time. Automated revenue growth on autopilot.</div>
+      <span class="feat-tag">Not on any platform</span>
+    </div>
+    <div class="feat">
+      <div class="feat-exclusive">EXCLUSIVE</div>
+      <div class="feat-icon">🔄</div>
+      <div class="feat-title">Retention Engine</div>
+      <div class="feat-desc">Automatically re-engages fans who go quiet. Detects churn risk before it happens and deploys personalised win-back campaigns.</div>
+      <span class="feat-tag">Not on any platform</span>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Deep Analytics</div>
+      <div class="feat-desc">Revenue per post, subscriber lifetime value, best posting times, niche performance breakdown. Data that actually helps you earn more.</div>
+      <span class="feat-tag">Better than competitors</span>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎵</div>
+      <div class="feat-title">AI Voice & Music</div>
+      <div class="feat-desc">Generate voice messages, background music, and audio content with AI. Scale your content without being in front of a mic every day.</div>
+      <span class="feat-tag">Unique to GLOWX</span>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🧠</div>
+      <div class="feat-title">Content Scheduler</div>
+      <div class="feat-desc">AI suggests optimal posting times based on your audience data. Schedule weeks of content in minutes. Never miss peak engagement hours.</div>
+      <span class="feat-tag">AI-powered</span>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💎</div>
+      <div class="feat-title">80% Payout. Always.</div>
+      <div class="feat-desc">Same rate as OnlyFans and Fanvue. But we give you 11 more features they don't have. Same cut. Ten times the platform. No question.</div>
+      <span class="feat-tag">Industry standard rate</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof-section">
+  <div class="section-label">Creator Results</div>
+  <h2 class="section-title">Real creators.<br><em>Real earnings.</em></h2>
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-earnings"><div class="proof-earnings-val">$14,200</div><div class="proof-earnings-label">Last 30 days</div></div>
+      <p class="proof-quote">The AI DMs alone doubled my revenue. I used to spend 4 hours a day messaging fans. Now it runs itself and earns more than I ever did manually.</p>
+      <div class="proof-author">
+        <div class="proof-avatar">🌟</div>
+        <div><div class="proof-name">Luna Voss</div><div class="proof-role">Lifestyle · 12.4K subscribers</div></div>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-earnings"><div class="proof-earnings-val">$31,800</div><div class="proof-earnings-label">Last 30 days</div></div>
+      <p class="proof-quote">I was on OnlyFans for 2 years. Switched to GLOWX and my income tripled in 3 months. The WhatsApp engine alone adds $3K a month I never had before.</p>
+      <div class="proof-author">
+        <div class="proof-avatar">📈</div>
+        <div><div class="proof-name">Crypto Kai</div><div class="proof-role">Finance · 22.1K subscribers</div></div>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-earnings"><div class="proof-earnings-val">$9,600</div><div class="proof-earnings-label">Last 30 days</div></div>
+      <p class="proof-quote">Multi-platform posting changed everything. I post once and it goes everywhere. My follower count went from 2K to 18K in 60 days. Nothing else does this.</p>
+      <div class="proof-author">
+        <div class="proof-avatar">💪</div>
+        <div><div class="proof-name">Marcus Fit</div><div class="proof-role">Fitness · 18.7K subscribers</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYOUT -->
+<section class="payout-section" id="payouts">
+  <div class="payout-grid">
+    <div>
+      <div class="section-label">The Payout</div>
+      <h2 class="section-title">Same rate.<br><em>Incomparable</em><br><strong>platform.</strong></h2>
+      <p style="font-size:0.85rem;color:var(--text);line-height:1.8;font-weight:300;max-width:460px;margin-bottom:0">Every competitor pays 80%. So do we. The difference is what we give you for that 20%. They give you a profile page. We give you an empire.</p>
+      <div class="platform-comparison">
+        <div class="plat-row">
+          <div class="plat-name">GLOWX</div>
+          <div class="plat-bar-bg"><div class="plat-fill glowx" style="width:80%"></div></div>
+          <div class="plat-pct glowx">80%</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-name">OnlyFans</div>
+          <div class="plat-bar-bg"><div class="plat-fill of" style="width:80%"></div></div>
+          <div class="plat-pct" style="color:var(--text)">80%</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-name">Fanvue</div>
+          <div class="plat-bar-bg"><div class="plat-fill fv" style="width:80%"></div></div>
+          <div class="plat-pct" style="color:var(--text)">80%</div>
+        </div>
+        <div class="plat-row">
+          <div class="plat-name">Fansly</div>
+          <div class="plat-bar-bg"><div class="plat-fill fs" style="width:80%"></div></div>
+          <div class="plat-pct" style="color:var(--text)">80%</div>
+        </div>
+      </div>
+      <div style="margin-top:24px;padding:20px 24px;background:rgba(201,168,76,0.06);border-left:3px solid var(--gold)">
+        <div style="font-size:0.8rem;color:var(--white2);line-height:1.7;font-weight:300;">Same 80% as everyone else — but GLOWX gives you <strong style="color:var(--gold)">9 exclusive features</strong> no other platform offers for that 20%. The choice is obvious.</div>
+      </div>
+    </div>
+    <div class="calc-box">
+      <div class="calc-title">Monthly Revenue Calculator — $10,000 Gross</div>
+      <div class="calc-row"><div class="calc-label">Your gross revenue</div><div class="calc-val gld">$10,000</div></div>
+      <div class="calc-row"><div class="calc-label">Platform fee (20%)</div><div class="calc-val neg">-$2,000</div></div>
+      <div class="calc-row"><div class="calc-label">Stripe processing (~3%)</div><div class="calc-val neg">-$300</div></div>
+      <div class="calc-row" style="border-bottom:2px solid rgba(201,168,76,0.3)"><div class="calc-label" style="color:var(--white);font-weight:500">You keep with GLOWX</div><div class="calc-val pos">$7,700</div></div>
+      <div class="calc-row"><div class="calc-label">You keep with OnlyFans</div><div class="calc-val" style="color:rgba(255,255,255,0.3)">$7,700</div></div>
+      <div class="advantage-box">
+        <div class="adv-label">GLOWX advantage</div>
+        <div class="adv-val">Same money.</div>
+        <div class="adv-sub" style="color:var(--gold);font-weight:500">But 9 more tools to earn it with.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO ADS -->
+<section class="video-ads-section" id="ads">
+  <div class="section-label">Marketing Scripts</div>
+  <h2 class="section-title">Ready-to-film<br><em>video ad scripts.</em></h2>
+  <p style="font-size:0.85rem;color:var(--text);line-height:1.8;font-weight:300;max-width:560px;margin-bottom:0">Copy these scripts directly into your video editor or hand them to your marketing team. Each one hits a different angle.</p>
+
+  <div class="ads-grid">
+
+    <div class="ad-card">
+      <div class="ad-header">
+        <div class="ad-type">TikTok / Reels Ad</div>
+        <div class="ad-duration">15–30 seconds</div>
+      </div>
+      <div class="ad-body">
+        <div class="ad-title">The Feature Gap</div>
+        <div class="ad-script"><span class="hook">[HOOK — 0-3s, talking to camera, direct eye contact]</span>
+
+OnlyFans doesn't have this. Fanvue doesn't have this. Fansly definitely doesn't have this.
+
+<span class="hook">[DEMO — 3-15s, screen recording of feature]</span>
+
+This is GLOWX. Your AI replies to every single fan DM automatically. It sells your PPV. It upsells your subscription. And you earn while you literally sleep.
+
+<span class="hook">[COMPARISON — 15-22s]</span>
+
+Same 80% payout as every other platform. But we're the only ones giving you AI that works for you 24/7.
+
+<span class="cta">[CTA — 22-30s, text overlay: GLOWX.COM]</span>
+
+Start free. No credit card. Link in bio.</div>
+      </div>
+      <div class="ad-platform">
+        <span class="platform-tag">TikTok</span>
+        <span class="platform-tag">Instagram Reels</span>
+        <span class="platform-tag">YouTube Shorts</span>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-header">
+        <div class="ad-type">YouTube Pre-roll</div>
+        <div class="ad-duration">45–60 seconds</div>
+      </div>
+      <div class="ad-body">
+        <div class="ad-title">The Pain Point</div>
+        <div class="ad-script"><span class="hook">[HOOK — 0-5s]</span>
+
+You're spending 6 hours a day replying to DMs. You're posting manually to five platforms. And your platform is taking 20% and giving you a profile page.
+
+<span class="pain">[PAIN — 5-20s]</span>
+
+OnlyFans, Fanvue, Fansly — they all take the same cut. None of them have AI DMs. None have WhatsApp engines. None let you post to TikTok, Instagram, and Twitter in one click.
+
+<span class="hook">[SOLUTION — 20-40s]</span>
+
+GLOWX has every single one of those features. Built from the ground up for creators who are serious about income. Our AI handles your DMs, schedules your content, re-engages quiet fans, and drives upsells — all automatically.
+
+<span class="cta">[CTA — 40-60s]</span>
+
+Same 80% payout. Ten times the platform. Start free at GLOWX — link below.</div>
+      </div>
+      <div class="ad-platform">
+        <span class="platform-tag">YouTube</span>
+        <span class="platform-tag">Facebook</span>
+        <span class="platform-tag">LinkedIn</span>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-header">
+        <div class="ad-type">Twitter / X Thread Ad</div>
+        <div class="ad-duration">Static + Thread</div>
+      </div>
+      <div class="ad-body">
+        <div class="ad-title">The Comparison Thread</div>
+        <div class="ad-script"><span class="hook">[TWEET 1 — Hook]</span>
+OnlyFans vs GLOWX. Same 80% payout. Very different platform. Here's what they don't tell you 🧵
+
+<span class="hook">[TWEET 2]</span>
+OnlyFans: DMs = you typing manually
+GLOWX: AI replies to every DM 24/7, drives PPV sales automatically
+
+<span class="hook">[TWEET 3]</span>
+OnlyFans: Post once, reach your OF audience
+GLOWX: Post once, publish to TikTok + Instagram + Twitter simultaneously
+
+<span class="hook">[TWEET 4]</span>
+OnlyFans: No phone access feature
+GLOWX: Phone lines, WhatsApp engine, per-minute billing — all automated
+
+<span class="hook">[TWEET 5]</span>
+OnlyFans: Fans churn, you find out too late
+GLOWX: Retention engine detects churn risk and re-engages automatically
+
+<span class="cta">[TWEET 6 — CTA]</span>
+Same payout. Nine exclusive features they don't have.
+Start free → GLOWX.COM</div>
+      </div>
+      <div class="ad-platform">
+        <span class="platform-tag">Twitter/X</span>
+        <span class="platform-tag">Threads</span>
+        <span class="platform-tag">Reddit</span>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-header">
+        <div class="ad-type">Influencer UGC Script</div>
+        <div class="ad-duration">30–45 seconds</div>
+      </div>
+      <div class="ad-body">
+        <div class="ad-title">The Switcher Story</div>
+        <div class="ad-script"><span class="hook">[PERSONAL — authentic, not scripted-sounding]</span>
+
+I was on OnlyFans for two years. Same 80% payout as GLOWX — but I was spending hours every day replying to DMs, posting manually to every platform, watching fans disappear and not knowing why.
+
+<span class="hook">[SWITCH MOMENT]</span>
+
+I switched to GLOWX three months ago. The AI DMs replaced 4 hours of my day. The WhatsApp engine added a revenue stream I never had. The multi-platform posting doubled my reach in 6 weeks.
+
+<span class="hook">[RESULT]</span>
+
+My monthly income went from $8K to $23K. Same payout rate. Completely different platform.
+
+<span class="cta">[CTA]</span>
+
+Link in bio. Start free. See for yourself.</div>
+      </div>
+      <div class="ad-platform">
+        <span class="platform-tag">TikTok</span>
+        <span class="platform-tag">Instagram</span>
+        <span class="platform-tag">YouTube</span>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-header">
+        <div class="ad-type">Feature Demo Reel</div>
+        <div class="ad-duration">60 seconds</div>
+      </div>
+      <div class="ad-body">
+        <div class="ad-title">The Nine Features</div>
+        <div class="ad-script"><span class="hook">[VOICEOVER over fast feature demos]</span>
+
+Nine features. No competitor has any of them.
+
+<span class="hook">[1 — 0-7s: AI DMs demo]</span>
+One. AI that replies to every fan DM. Automatically. 24/7.
+
+<span class="hook">[2 — 7-14s: WhatsApp demo]</span>
+Two. WhatsApp engine. Premium access. Billed monthly.
+
+<span class="hook">[3 — 14-21s: Phone lines demo]</span>
+Three. Phone lines. Per-minute billing. Fully automated.
+
+<span class="hook">[4 — 21-28s: Multi-platform demo]</span>
+Four. Post once. Publish to seven platforms.
+
+<span class="hook">[5-9 — 28-50s: fast cuts]</span>
+Live gifts. Toy integration. Upsell engine. Retention AI. Deep analytics.
+
+<span class="cta">[50-60s]</span>
+Same 80% payout as OnlyFans. Nine features they don't have.
+GLOWX. Start free.</div>
+      </div>
+      <div class="ad-platform">
+        <span class="platform-tag">YouTube</span>
+        <span class="platform-tag">TikTok</span>
+        <span class="platform-tag">All platforms</span>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-header">
+        <div class="ad-type">Email / Newsletter</div>
+        <div class="ad-duration">150 words</div>
+      </div>
+      <div class="ad-body">
+        <div class="ad-title">The Direct Pitch</div>
+        <div class="ad-script"><span class="hook">[SUBJECT LINE]</span>
+OnlyFans takes 20%. So does GLOWX. But only one of us gives you this.
+
+<span class="hook">[BODY]</span>
+Here's a question nobody asks: if all the major creator platforms charge the same 20% — what are you actually getting for it?
+
+OnlyFans gives you a profile. Fanvue gives you basic analytics. Fansly gives you a feed.
+
+GLOWX gives you:
+→ AI that replies to your DMs 24/7
+→ WhatsApp access engine
+→ Phone lines with per-minute billing
+→ Post once, publish everywhere
+→ Live streaming with real-time gifts
+→ Toy integration
+→ Upsell automation
+→ Retention engine
+→ Deep analytics
+
+Same 20%. Nine features they don't have.
+
+<span class="cta">[CTA]</span>
+Start free at GLOWX → No card required.</div>
+      </div>
+      <div class="ad-platform">
+        <span class="platform-tag">Email</span>
+        <span class="platform-tag">Newsletter</span>
+        <span class="platform-tag">DM campaign</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="text-align:center">Ready?</div>
+  <h2 class="cta-title">Same rate.<br><em>No competition.</em></h2>
+  <p class="cta-sub">9 features no other platform has. 80% payout matching the industry standard.<br>Start free — your first payout in 7 days.</p>
+  <div class="cta-actions">
+    <button class="btn-gold-lg" onclick="openModal('signup')">Create Your Page Free</button>
+    <button class="btn-ghost-lg" onclick="document.getElementById('comparison').scrollIntoView({behavior:'smooth'})">See Full Comparison</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">GLOWX</div>
+      <div class="footer-desc">The creator platform with no competition. 80% payouts, 9 exclusive features, and tools that actually grow your income.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#">Browse Creators</a></li>
+        <li><a href="#">Feature List</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">vs. OnlyFans</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Creators</div>
+      <ul class="footer-links">
+        <li><a href="#">Start Creating</a></li>
+        <li><a href="#">AI DMs Guide</a></li>
+        <li><a href="#">WhatsApp Setup</a></li>
+        <li><a href="#">Payout Info</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About GLOWX</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 GLOWX — Dollar Double Empire. All rights reserved.</div>
+    <div class="footer-copy">Same rate. No competition.</div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 class="modal-title">Welcome back.</h3><p class="modal-sub">Sign in to your GLOWX account</p></div>
+      <button style="background:none;border:none;color:var(--text);font-size:1.5rem;cursor:none;" onclick="closeModal('login')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@email.com" id="loginEmail"></div>
+    <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" placeholder="••••••••" id="loginPassword"></div>
+    <button class="form-submit" onclick="handleLogin()">Sign In</button>
+    <p class="modal-switch">No account? <a onclick="closeModal('login');openModal('signup')">Create one free</a></p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 class="modal-title">Start earning.</h3><p class="modal-sub">Create your free GLOWX account</p></div>
+      <button style="background:none;border:none;color:var(--text);font-size:1.5rem;cursor:none;" onclick="closeModal('signup')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" placeholder="Your name" id="signupName"></div>
+    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@email.com" id="signupEmail"></div>
+    <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" placeholder="Create a password" id="signupPassword"></div>
+    <div class="form-group"><label class="form-label">Joining as</label><select class="form-input" id="signupRole" style="appearance:none;cursor:none"><option value="creator">Creator — I want to earn</option><option value="fan">Fan — I want to subscribe</option></select></div>
+    <button class="form-submit" onclick="handleSignup()">Create Account — Free</button>
+    <p class="modal-switch">Already have an account? <a onclick="closeModal('signup');openModal('login')">Sign in</a></p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+document.querySelectorAll('button,a,input,select').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2)';ring.style.width='48px';ring.style.height='48px';});
+  el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='32px';ring.style.height='32px';});
+});
+
+function openModal(t){document.getElementById(t+'Modal').classList.add('active');document.body.style.overflow='hidden';}
+function closeModal(t){document.getElementById(t+'Modal').classList.remove('active');document.body.style.overflow='';}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('active');document.body.style.overflow='';}}););
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+const API='https://ai-influencer-studio-production.up.railway.app/api';
+
+async function handleSignup(){
+  const name=document.getElementById('signupName').value;
+  const email=document.getElementById('signupEmail').value;
+  const password=document.getElementById('signupPassword').value;
+  if(!email||!password||!name){showToast('Please fill all fields');return;}
+  try{
+    const res=await fetch(API+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,name})});
+    const data=await res.json();
+    if(data.token){localStorage.setItem('glowx_token',data.token);closeModal('signup');showToast('Welcome to GLOWX ✦');}
+    else showToast(data.error||'Registration failed');
+  }catch{showToast('Connection error. Try again.');}
+}
+
+async function handleLogin(){
+  const email=document.getElementById('loginEmail').value;
+  const password=document.getElementById('loginPassword').value;
+  if(!email||!password){showToast('Please fill all fields');return;}
+  try{
+    const res=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await res.json();
+    if(data.token){localStorage.setItem('glowx_token',data.token);closeModal('login');showToast('Welcome back ✦');}
+    else showToast(data.error||'Login failed');
+  }catch{showToast('Connection error. Try again.');}
+}
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:0.1});
+document.querySelectorAll('.feat,.proof-card,.ad-card,.plat-row').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(24px)';el.style.transition='opacity 0.5s ease, transform 0.5s ease';obs.observe(el);});
+</script>
+</body>
+</html>

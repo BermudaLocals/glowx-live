@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Influencer Accelerator 3.0 — @aigrowth_hq</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #04040a;
+  --card: #0c0c16;
+  --border: #1c1c2e;
+  --mag: #FF00FF;
+  --cyan: #00F2EA;
+  --gold: #FFD700;
+  --green: #00FF88;
+  --orange: #FF4500;
+  --blue: #4B9EFF;
+  --text: #f0f0f8;
+  --muted: #52526e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black); color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  min-height: 100vh; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(255,0,255,0.07) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,242,234,0.05) 0%, transparent 50%);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 58px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  background: rgba(4,4,10,0.88); backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, var(--mag), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-plan-badge {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  padding: 4px 12px; border-radius: 20px; text-transform: uppercase;
+}
+.badge-free { background: rgba(255,255,255,0.08); color: var(--muted); border: 1px solid var(--border); }
+.badge-starter { background: rgba(0,242,234,0.12); color: var(--cyan); border: 1px solid rgba(0,242,234,0.3); }
+.badge-pro { background: rgba(255,0,255,0.12); color: var(--mag); border: 1px solid rgba(255,0,255,0.3); }
+.badge-empire { background: linear-gradient(135deg,var(--gold),var(--orange)); color: #000; border: none; }
+.btn-upgrade {
+  background: linear-gradient(135deg, var(--mag), var(--cyan));
+  color: #000; font-weight: 700; font-size: 13px;
+  padding: 7px 18px; border-radius: 8px; border: none; cursor: pointer;
+  text-decoration: none; display: inline-block;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btn-upgrade:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── MAIN LAYOUT ── */
+.layout { display: flex; padding-top: 58px; min-height: 100vh; position: relative; z-index: 1; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 280px; flex-shrink: 0;
+  background: rgba(12,12,22,0.95);
+  border-right: 1px solid var(--border);
+  position: fixed; top: 58px; bottom: 0; left: 0;
+  overflow-y: auto; padding: 24px 0;
+}
+.sidebar-section { padding: 0 16px; margin-bottom: 8px; }
+.sidebar-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  color: var(--muted); text-transform: uppercase;
+  padding: 14px 8px 8px;
+}
+.module-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 8px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  transition: all 0.15s; position: relative; text-decoration: none;
+  border: 1px solid transparent;
+}
+.module-link:hover { color: var(--text); background: var(--border); }
+.module-link.active { color: var(--text); background: rgba(255,0,255,0.08); border-color: rgba(255,0,255,0.2); }
+.module-link.completed { color: var(--green); }
+.module-link.locked { color: var(--muted); opacity: 0.5; cursor: not-allowed; }
+.mod-icon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.mod-num { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; }
+.mod-status { margin-left: auto; font-size: 14px; }
+
+/* Upgrade prompt in sidebar */
+.sidebar-upgrade {
+  margin: 16px 16px 0;
+  background: linear-gradient(135deg, rgba(255,0,255,0.08), rgba(0,242,234,0.08));
+  border: 1px solid rgba(255,0,255,0.2); border-radius: 12px; padding: 16px;
+  text-align: center;
+}
+.sidebar-upgrade h4 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.sidebar-upgrade p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+/* ── CONTENT AREA ── */
+.content { margin-left: 280px; flex: 1; max-width: 780px; padding: 40px 36px 80px; }
+
+/* ── PROGRESS BAR ── */
+.course-progress {
+  background: var(--border); border-radius: 12px; padding: 16px 20px;
+  margin-bottom: 32px; display: flex; align-items: center; gap: 16px;
+}
+.progress-bar-wrap { flex: 1; background: rgba(255,255,255,0.06); border-radius: 8px; height: 8px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--mag), var(--cyan)); transition: width 0.6s ease; }
+.progress-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+/* ── MODULE CONTENT ── */
+.module-view { display: none; }
+.module-view.active { display: block; }
+
+.module-header-block {
+  margin-bottom: 28px;
+}
+.mod-phase-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 12px;
+}
+.tag-create { background: rgba(255,0,255,0.1); color: var(--mag); border: 1px solid rgba(255,0,255,0.2); }
+.tag-dream  { background: rgba(0,242,234,0.1); color: var(--cyan); border: 1px solid rgba(0,242,234,0.2); }
+.tag-earn   { background: rgba(255,215,0,0.1); color: var(--gold); border: 1px solid rgba(255,215,0,0.2); }
+.tag-grow   { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
+.tag-auto   { background: rgba(75,158,255,0.1); color: var(--blue); border: 1px solid rgba(75,158,255,0.2); }
+
+.module-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+.module-sub { font-size: 15px; color: var(--muted); }
+
+/* ── INSTRUCTION BLOCKS ── */
+.inst {
+  border-radius: 10px; padding: 16px 18px; margin: 14px 0;
+  font-size: 14px; line-height: 1.75; border-left: 3px solid;
+  position: relative;
+}
+.inst::before {
+  display: block; font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.inst-action { background: rgba(255,0,255,0.05); border-color: var(--mag); color: #e8d0e8; }
+.inst-action::before { content: '⚡ ACTION'; color: var(--mag); }
+.inst-tool { background: rgba(0,242,234,0.05); border-color: var(--cyan); color: #c8e8e8; }
+.inst-tool::before { content: '🔧 TOOL'; color: var(--cyan); }
+.inst-tip { background: rgba(255,215,0,0.05); border-color: var(--gold); color: #e8e0c0; }
+.inst-tip::before { content: '💡 PRO TIP'; color: var(--gold); }
+.inst-money { background: rgba(0,255,136,0.05); border-color: var(--green); color: #c0e8d0; }
+.inst-money::before { content: '💰 REVENUE'; color: var(--green); }
+.inst-warn { background: rgba(255,69,0,0.05); border-color: var(--orange); color: #e8ccc0; }
+.inst-warn::before { content: '⚠️ IMPORTANT'; color: var(--orange); }
+.inst-lock { background: rgba(255,255,255,0.03); border-color: var(--muted); color: var(--muted); }
+.inst-lock::before { content: '🔒 MEMBERS ONLY'; color: var(--muted); }
+
+/* ── CHECKLIST ── */
+.checklist { list-style: none; margin: 14px 0; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 14px; cursor: pointer; transition: color 0.15s;
+}
+.checklist li:last-child { border-bottom: none; }
+.chk {
+  width: 20px; height: 20px; border-radius: 6px;
+  border: 1.5px solid var(--muted); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; margin-top: 1px; transition: all 0.2s;
+}
+.checklist li.done .chk { background: var(--green); border-color: var(--green); color: #000; font-weight: 900; }
+.checklist li.done { color: var(--muted); text-decoration: line-through; }
+
+/* ── PROMPT BOX ── */
+.prompt-box {
+  background: #080810; border: 1px solid rgba(0,242,234,0.2);
+  border-radius: 10px; padding: 16px; font-family: 'Courier New', monospace;
+  font-size: 12px; color: var(--cyan); margin: 12px 0; white-space: pre-wrap;
+  line-height: 1.6; position: relative;
+}
+.copy-btn {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(0,242,234,0.1); border: 1px solid rgba(0,242,234,0.3);
+  color: var(--cyan); border-radius: 6px; padding: 4px 10px;
+  font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.copy-btn:hover { background: rgba(0,242,234,0.2); }
+
+/* ── TOOL CARDS ── */
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+.tool-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px; text-decoration: none;
+  display: flex; flex-direction: column; gap: 5px;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.tool-card:hover { border-color: var(--mag); transform: translateY(-2px); }
+.tool-tag { font-size: 9px; font-weight: 900; letter-spacing: 1px; padding: 2px 7px; border-radius: 4px; display: inline-block; width: fit-content; }
+.tag-own { background: var(--mag); color: #000; }
+.tag-aff { background: var(--gold); color: #000; }
+.tag-req { background: var(--orange); color: #fff; }
+.tool-name { font-weight: 700; font-size: 14px; color: var(--text); }
+.tool-desc { font-size: 12px; color: var(--muted); }
+.tool-price { font-size: 13px; font-weight: 700; color: var(--green); margin-top: 4px; }
+
+/* ── SIGNUP GATE (forced at end of each module) ── */
+.signup-gate {
+  background: linear-gradient(135deg, rgba(255,0,255,0.06), rgba(0,242,234,0.06));
+  border: 1px solid rgba(255,0,255,0.25); border-radius: 16px;
+  padding: 28px; margin: 28px 0; text-align: center;
+}
+.gate-icon { font-size: 40px; margin-bottom: 12px; }
+.gate-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.gate-sub { font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+.gate-platforms { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.platform-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 13px;
+  text-decoration: none; cursor: pointer; border: none; transition: all 0.2s;
+}
+.platform-btn:hover { transform: translateY(-2px); }
+.pbtn-studio { background: linear-gradient(135deg,var(--mag),var(--cyan)); color: #000; }
+.pbtn-fanvue { background: #1a1a2e; border: 1px solid #7B2D8B; color: #c07ada; }
+.pbtn-glowx  { background: #1a1a2e; border: 1px solid var(--gold); color: var(--gold); }
+.gate-skip { font-size: 12px; color: var(--muted); margin-top: 12px; cursor: pointer; }
+.gate-skip:hover { color: var(--text); }
+.gate-skip span { text-decoration: underline; }
+
+/* ── COMPLETE MODULE BUTTON ── */
+.complete-btn {
+  width: 100%; padding: 16px; border-radius: 12px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--mag), var(--cyan));
+  color: #000; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800;
+  letter-spacing: 0.5px; margin-top: 28px; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.complete-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,0,255,0.3); }
+.complete-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── DOWNLOAD GATE ── */
+.download-gate {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px; margin: 16px 0;
+  display: flex; align-items: center; gap: 16px;
+}
+.dl-icon { font-size: 32px; flex-shrink: 0; }
+.dl-info { flex: 1; }
+.dl-name { font-weight: 700; font-size: 15px; }
+.dl-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.dl-btn {
+  padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 13px;
+  border: none; cursor: pointer; text-decoration: none; display: inline-block;
+  transition: all 0.2s; white-space: nowrap;
+}
+.dl-btn-locked { background: var(--border); color: var(--muted); cursor: not-allowed; }
+.dl-btn-unlocked { background: linear-gradient(135deg,var(--green),var(--cyan)); color: #000; }
+.dl-btn-unlocked:hover { transform: translateY(-1px); }
+.dl-plan-note { font-size: 10px; color: var(--orange); margin-top: 4px; font-weight: 600; }
+
+/* ── UPGRADE MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(4,4,10,0.92); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px; max-width: 720px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  transform: translateY(20px); transition: transform 0.3s;
+}
+.modal-overlay.open .modal { transform: none; }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 8px; text-align: center; }
+.modal-sub { color: var(--muted); font-size: 14px; text-align: center; margin-bottom: 28px; }
+.plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.plan-card {
+  background: var(--black); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px; text-align: center; position: relative;
+  transition: all 0.2s; cursor: pointer;
+}
+.plan-card:hover { border-color: var(--mag); }
+.plan-card.featured { border-color: var(--mag); background: rgba(255,0,255,0.05); }
+.plan-card.featured::before {
+  content: 'MOST POPULAR'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--mag); color: #000; font-size: 9px; font-weight: 900;
+  padding: 3px 10px; border-radius: 10px; letter-spacing: 1px; white-space: nowrap;
+}
+.plan-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+.plan-price { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; line-height: 1; }
+.plan-period { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+.plan-features { list-style: none; text-align: left; font-size: 12px; margin-bottom: 16px; }
+.plan-features li { padding: 4px 0; display: flex; align-items: flex-start; gap: 7px; }
+.plan-features li::before { content: '✓'; color: var(--green); font-weight: 900; flex-shrink: 0; }
+.plan-features li.no::before { content: '✕'; color: var(--muted); }
+.plan-features li.no { color: var(--muted); }
+.plan-btn {
+  width: 100%; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px;
+  border: none; cursor: pointer; transition: all 0.2s;
+}
+.plan-btn-primary { background: linear-gradient(135deg,var(--mag),var(--cyan)); color: #000; }
+.plan-btn-secondary { background: var(--border); color: var(--text); }
+.plan-btn-gold { background: linear-gradient(135deg,var(--gold),var(--orange)); color: #000; }
+.modal-close {
+  position: absolute; top: 16px; right: 20px;
+  background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer;
+}
+
+/* ── PURCHASE GATE (first screen before access) ── */
+.purchase-wall {
+  position: fixed; inset: 0; z-index: 300;
+  background: var(--black); display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.purchase-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 24px; padding: 48px 40px; max-width: 560px; width: 100%; text-align: center;
+}
+.purchase-logo { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--muted); margin-bottom: 24px; }
+.purchase-title { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; line-height: 1.1; margin-bottom: 14px; }
+.purchase-price-block { margin: 24px 0; }
+.purchase-orig { font-size: 16px; color: var(--muted); text-decoration: line-through; }
+.purchase-price { font-family: 'Syne', sans-serif; font-size: 56px; font-weight: 800; color: var(--green); line-height: 1; }
+.purchase-period { font-size: 14px; color: var(--muted); }
+.purchase-includes {
+  background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 12px; padding: 16px; margin: 20px 0; text-align: left;
+}
+.purchase-includes h4 { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--green); text-transform: uppercase; margin-bottom: 10px; }
+.purchase-includes li { font-size: 13px; padding: 3px 0; display: flex; gap: 8px; list-style: none; }
+.purchase-includes li::before { content: '✓'; color: var(--green); font-weight: 900; }
+.purchase-btn {
+  width: 100%; padding: 18px; border-radius: 14px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--mag), var(--cyan));
+  color: #000; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+  margin-top: 8px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.purchase-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(255,0,255,0.4); }
+.purchase-note { font-size: 12px; color: var(--muted); margin-top: 14px; }
+.purchase-login { font-size: 13px; margin-top: 16px; }
+.purchase-login a { color: var(--cyan); cursor: pointer; }
+
+/* ── FANVUE STEP-BY-STEP ── */
+.fv-step-header { margin-bottom: 12px; }
+.fv-step-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+.fv-step-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+.fv-step-body { text-align: left; }
+.fv-screen-mock { background: #090914; border: 1px solid rgba(123,45,139,0.3); border-radius: 12px; padding: 16px; margin: 12px 0; }
+.fv-mock-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.fv-mock-box { background: #0f0f1e; border-radius: 8px; padding: 14px; }
+.fv-mock-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+.fv-mock-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.fv-mock-note { font-size: 12px; color: var(--orange); margin-bottom: 8px; }
+.fv-mock-select { font-size: 13px; color: var(--cyan); }
+.fv-choice { background: #1a1a2e; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin: 6px 0; text-align: left; font-size: 13px; }
+.fv-choice-active { border-color: #7B2D8B; background: rgba(123,45,139,0.15); }
+.fv-done-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; cursor: pointer; background: rgba(123,45,139,0.2); border: 1px solid #7B2D8B; color: #c07ada; font-weight: 700; font-size: 14px; margin-top: 14px; transition: all 0.2s; }
+.fv-done-btn:hover { background: rgba(123,45,139,0.35); }
+.fv-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+.fv-dot-active { background: #7B2D8B; box-shadow: 0 0 8px #7B2D8B; width: 20px; border-radius: 4px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+.fade-up { animation: fadeUp 0.4s ease both; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .content { margin-left: 0; padding: 20px 16px 60px; }
+  .plan-grid { grid-template-columns: 1fr; }
+  .tool-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- PURCHASE WALL — shown to non-paying visitors                  -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="purchase-wall" id="purchaseWall">
+  <div class="purchase-card fade-up">
+    <div class="purchase-logo">@AIGROWTH_HQ</div>
+    <div style="font-size:36px;margin-bottom:12px;">🚀</div>
+    <div class="purchase-title">AI Influencer<br>Accelerator 3.0</div>
+    <div style="font-size:14px;color:var(--muted);margin-top:8px;">The complete system to build, monetise<br>and automate your AI creator empire</div>
+
+    <div class="purchase-price-block">
+      <div class="purchase-orig">Usually $297</div>
+      <div class="purchase-price">$97</div>
+      <div class="purchase-period">one-time · lifetime access + Starter plan</div>
+    </div>
+
+    <div class="purchase-includes">
+      <h4>What's included</h4>
+      <ul>
+        <li>7 step-by-step video modules (unlock as you complete)</li>
+        <li>Starter membership — AI Influencer Studio (1 creator, SFW/UGC)</li>
+        <li>Prompt library, scripts & templates</li>
+        <li>Access to affiliate tools + discount codes</li>
+        <li>Private @aigrowth_hq community</li>
+        <li>Forced platform signups = your funnels auto-built</li>
+      </ul>
+    </div>
+
+    <div style="background:rgba(255,69,0,0.06);border:1px solid rgba(255,69,0,0.2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;color:#e8ccc0;">
+      ⚠️ <strong style="color:var(--orange)">Downloads locked behind paid plan.</strong> Course fee = Starter plan. Upgrade for full earning potential.
+    </div>
+
+    <button class="purchase-btn" onclick="completePurchase()">
+      🔓 Get Instant Access — $97
+    </button>
+    <div class="purchase-note">Secure payment via Stripe · 30-day refund guarantee</div>
+    <div class="purchase-login">Already purchased? <a onclick="skipPurchase()">Log in here</a></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- UPGRADE MODAL                                                  -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="upgradeModal">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Unlock Your Earning Potential</div>
+    <div class="modal-sub">Your $97 course gives you Starter access. Upgrade to start making real money.</div>
+
+    <div class="plan-grid">
+      <!-- STARTER -->
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div style="font-size:11px;color:var(--cyan);margin-bottom:8px;">Included with course</div>
+        <div class="plan-price" style="color:var(--cyan);">$97</div>
+        <div class="plan-period">one-time</div>
+        <ul class="plan-features">
+          <li>1 AI creator (SFW/UGC only)</li>
+          <li>Personal use only</li>
+          <li>Tools Studio access</li>
+          <li>Course downloads</li>
+          <li class="no">No earning features</li>
+          <li class="no">No Fanvue integration</li>
+          <li class="no">No GlowX monetisation</li>
+          <li class="no">No brand deals</li>
+          <li class="no">No auto-publishing</li>
+        </ul>
+        <div class="plan-btn plan-btn-secondary" style="text-align:center;padding:10px;border-radius:8px;font-size:13px;font-weight:700;">Current Plan ✓</div>
+      </div>
+
+      <!-- CREATOR PRO — FEATURED -->
+      <div class="plan-card featured">
+        <div class="plan-name">Creator Pro</div>
+        <div style="font-size:11px;color:var(--mag);margin-bottom:8px;">Start earning</div>
+        <div class="plan-price" style="color:var(--mag);">$49</div>
+        <div class="plan-period">/month</div>
+        <ul class="plan-features">
+          <li>5 AI creators (SFW + adult)</li>
+          <li>Fanvue monetisation</li>
+          <li>GlowX creator account</li>
+          <li>DM automation</li>
+          <li>PPV + subscription income</li>
+          <li>Brand deal pitcher</li>
+          <li>Auto-publishing (TikTok/IG)</li>
+          <li>UGC video creation</li>
+          <li>All course downloads</li>
+        </ul>
+        <button class="plan-btn plan-btn-primary" onclick="selectPlan('pro')">Upgrade — $49/mo</button>
+      </div>
+
+      <!-- EMPIRE -->
+      <div class="plan-card">
+        <div class="plan-name">Empire</div>
+        <div style="font-size:11px;color:var(--gold);margin-bottom:8px;">Maximum scale</div>
+        <div class="plan-price" style="color:var(--gold);">$197</div>
+        <div class="plan-period">/month</div>
+        <ul class="plan-features">
+          <li>29 AI creators (all niches)</li>
+          <li>Adult content unlocked</li>
+          <li>200 AI agents (SwarmNet)</li>
+          <li>Done-For-You setup</li>
+          <li>KUSH outreach system</li>
+          <li>Full analytics suite</li>
+          <li>Priority support</li>
+          <li>White-label option</li>
+          <li>Everything in Pro</li>
+        </ul>
+        <button class="plan-btn plan-btn-gold" onclick="selectPlan('empire')">Go Empire — $197/mo</button>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:14px;font-size:13px;color:#e8e0c0;">
+      💡 <strong style="color:var(--gold)">Revenue reality:</strong> Creator Pro at 50 Fanvue subscribers × $19.99 = $999.50/mo gross. Empire at 500 subscribers across 5 creators = <strong style="color:var(--green)">$9,995/mo</strong>. Your upgrade pays for itself in the first week.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- MAIN APP (hidden until purchased)                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="mainApp" style="display:none;">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">@AIGROWTH_HQ</div>
+  <div class="nav-right">
+    <span class="nav-plan-badge badge-starter" id="planBadge">STARTER</span>
+    <a class="btn-upgrade" onclick="openModal()">⬆ Upgrade to Earn</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Your Journey</div>
+
+      <a class="module-link active" onclick="showModule(0)" id="link-0">
+        <div class="mod-icon" style="background:rgba(255,0,255,0.15);">🌌</div>
+        <span>Phase 1 — Imagine</span>
+        <span class="mod-status" id="status-0">●</span>
+      </a>
+      <a class="module-link locked" onclick="tryModule(1)" id="link-1">
+        <div class="mod-icon" style="background:rgba(0,242,234,0.1);">✨</div>
+        <span>Phase 2 — Dream</span>
+        <span class="mod-status" id="status-1">🔒</span>
+      </a>
+      <a class="module-link locked" onclick="tryModule(2)" id="link-2">
+        <div class="mod-icon" style="background:rgba(255,215,0,0.1);">🎬</div>
+        <span>Phase 3 — Create</span>
+        <span class="mod-status" id="status-2">🔒</span>
+      </a>
+      <a class="module-link locked" onclick="tryModule(3)" id="link-3">
+        <div class="mod-icon" style="background:rgba(0,255,136,0.1);">💰</div>
+        <span>Phase 4 — Monetise</span>
+        <span class="mod-status" id="status-3">🔒</span>
+      </a>
+      <a class="module-link locked" onclick="tryModule(4)" id="link-4">
+        <div class="mod-icon" style="background:rgba(75,158,255,0.1);">🔄</div>
+        <span>Phase 5 — Automate</span>
+        <span class="mod-status" id="status-4">🔒</span>
+      </a>
+      <a class="module-link locked" onclick="tryModule(5)" id="link-5">
+        <div class="mod-icon" style="background:rgba(75,158,255,0.1);">🤖</div>
+        <span>Phase 6 — 200 Agents</span>
+        <span class="mod-status" id="status-5">🔒</span>
+      </a>
+      <a class="module-link locked" onclick="tryModule(6)" id="link-6">
+        <div class="mod-icon" style="background:rgba(255,215,0,0.1);">🤝</div>
+        <span>Phase 7 — Deal Pitcher</span>
+        <span class="mod-status" id="status-6">🔒</span>
+      </a>
+    </div>
+
+    <div class="sidebar-upgrade">
+      <h4>🔒 Downloads Locked</h4>
+      <p>Downloads require a paid plan. Your $97 course includes Starter (no earning). Upgrade to unlock everything.</p>
+      <button class="btn-upgrade" style="width:100%;" onclick="openModal()">Upgrade Now →</button>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- PROGRESS -->
+    <div class="course-progress">
+      <div style="font-size:22px;">🎓</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">0 / 7 complete</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 0: IMAGINE                                   -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view active" id="module-0">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-create">🌌 Phase 1</div>
+        <div class="module-title">IMAGINE<br>Your AI Creator Identity</div>
+        <div class="module-sub">Before you build anything — define who your AI influencer is. Name, niche, personality, visual aesthetic.</div>
+      </div>
+
+      <div class="inst inst-tip">
+        The 7 most profitable niches right now: <strong>Luxury Lifestyle</strong> ($8k/mo avg), <strong>Finance/Crypto</strong> ($5k/mo), <strong>Fitness</strong> ($4k/mo), <strong>Beauty</strong> ($3k/mo), <strong>Adult/Fanvue</strong> ($10k+/mo), <strong>Gaming</strong>, <strong>Travel</strong>. Adult content requires upgrading to Creator Pro.
+      </div>
+
+      <h3 style="font-family:'Syne',sans-serif;font-size:17px;margin:24px 0 12px;">Step 1 — Choose Your Niche</h3>
+      <ul class="checklist" id="cl-0">
+        <li onclick="toggleCheck(this,0)"><span class="chk"></span>Pick your primary niche (choose the one you understand best)</li>
+        <li onclick="toggleCheck(this,0)"><span class="chk"></span>Research top 3 existing AI influencers in that niche</li>
+        <li onclick="toggleCheck(this,0)"><span class="chk"></span>Write your creator's USP — what makes them different</li>
+        <li onclick="toggleCheck(this,0)"><span class="chk"></span>Pick a memorable 2-syllable name</li>
+      </ul>
+
+      <h3 style="font-family:'Syne',sans-serif;font-size:17px;margin:24px 0 12px;">Step 2 — Use AI to Generate Your Creator Profile</h3>
+      <div class="inst inst-action">
+        1. Sign up to AI Influencer Studio (required below)<br>
+        2. Go to <strong>Avatar Studio → Browse Creators</strong><br>
+        3. Pick from 29 pre-built AI creators OR create custom<br>
+        4. Your Starter plan includes <strong>1 creator, SFW/UGC only</strong>
+      </div>
+
+      <div class="prompt-box" id="p0">Generate a complete AI influencer persona for the [NICHE] niche:
+- Name (2 syllables, brandable)
+- Age, nationality, personality in 2 sentences
+- Visual style (what they look like, wardrobe aesthetic)
+- Voice style (tone, accent, energy)
+- Platform focus (TikTok, Instagram, Fanvue)
+- Tagline under 10 words
+- Welcome DM message (50 words)
+
+Return as JSON.</div>
+      <button class="copy-btn" onclick="copyEl('p0')">Copy</button>
+
+      <!-- SIGNUP GATE — Module 0 requires AI Influencer Studio signup -->
+      <div class="signup-gate">
+        <div class="gate-icon">🎭</div>
+        <div class="gate-title">Step 2 requires AI Influencer Studio</div>
+        <div class="gate-sub">
+          Sign up free to access your 29 AI creators, avatar builder, and content generator.<br>
+          <strong style="color:var(--mag)">Included with your $97 course.</strong>
+        </div>
+        <div class="gate-platforms">
+          <a href="https://ai-influencer-studio-production.up.railway.app" target="_blank" class="platform-btn pbtn-studio" onclick="markSignup('studio')">
+            🎭 Sign Up — AI Influencer Studio
+          </a>
+        </div>
+        <div class="gate-skip" id="skip-studio" style="display:none;">
+          Already signed up? <span onclick="markSignup('studio')">Mark as done ✓</span>
+        </div>
+      </div>
+
+      <!-- DOWNLOADS (locked for non-plan members) -->
+      <h3 style="font-family:'Syne',sans-serif;font-size:17px;margin:24px 0 12px;">📦 Module Downloads</h3>
+      <div class="inst inst-lock">Downloads are available to paid plan members only. Your $97 course includes Starter plan access. Upgrade to Creator Pro to unlock all resources.</div>
+
+      <div class="download-gate">
+        <div class="dl-icon">📄</div>
+        <div class="dl-info">
+          <div class="dl-name">Creator Persona Template Pack</div>
+          <div class="dl-desc">29 pre-built creator profiles + blank template</div>
+          <div class="dl-plan-note" id="dl-plan-note-0">🔒 Starter plan — included with course purchase</div>
+        </div>
+        <button class="dl-btn dl-btn-unlocked" onclick="downloadItem('creator-personas','Creator Persona Template Pack')">⬇ Download</button>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">📋</div>
+        <div class="dl-info">
+          <div class="dl-name">Niche Research Spreadsheet</div>
+          <div class="dl-desc">Revenue benchmarks for 15 niches</div>
+          <div class="dl-plan-note">🔒 Starter plan — included</div>
+        </div>
+        <button class="dl-btn dl-btn-unlocked" onclick="downloadItem('niche-research','Niche Research Spreadsheet')">⬇ Download</button>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">🤑</div>
+        <div class="dl-info">
+          <div class="dl-name">Adult Content Revenue Blueprint</div>
+          <div class="dl-desc">Fanvue setup + pricing guide for adult creators</div>
+          <div class="dl-plan-note" id="adult-plan-note">🔒 Creator Pro required ($49/mo)</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" id="adult-dl-btn" onclick="openModal()">🔒 Upgrade to Download</button>
+      </div>
+
+      <button class="complete-btn" id="complete-0" onclick="completeModule(0)">
+        ✅ Complete Phase 1 — Unlock Phase 2
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 1: DREAM — FACE CREATION                    -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view" id="module-1">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-dream">✨ Phase 2</div>
+        <div class="module-title">DREAM<br>Build Your AI Face</div>
+        <div class="module-sub">Create a hyper-realistic, consistent AI human face that works across all content types.</div>
+      </div>
+
+      <div class="inst inst-action">
+        1. Go to <strong>AI Influencer Studio → Tools Studio → Generate Image</strong><br>
+        2. Select model: <strong>RealVisXL</strong> (best for photorealistic humans)<br>
+        3. Use the face generation prompt below<br>
+        4. Generate 6 options — download the best headshot<br>
+        5. This is your creator's permanent face — choose carefully
+      </div>
+
+      <div class="prompt-box" id="p1">Ultra-realistic portrait photography, [NATIONALITY] woman/man, age [AGE], [HAIR] hair, [EYE COLOR] eyes, [SKIN TONE] flawless skin, professional headshot, 8K resolution, studio lighting, Canon EOS R5 85mm, confident expression, white background, photorealistic, hyperdetailed, no text, no watermark</div>
+      <button class="copy-btn" onclick="copyEl('p1')">Copy</button>
+
+      <div class="inst inst-tip">
+        <strong>The 81% Match Rule:</strong> After generating scene images, test face consistency at facecheck.id. Above 80% = same person, safe to post. Below 70% = use Face Swap in Tools Studio to fix it automatically.
+      </div>
+
+      <!-- SIGNUP GATE — GlowX required for Phase 2 -->
+      <div class="signup-gate">
+        <div class="gate-icon">✨</div>
+        <div class="gate-title">Connect GlowX to host your AI creator</div>
+        <div class="gate-sub">
+          GlowX is the platform where your AI influencer lives, builds followers, and earns. Required to complete Phase 2.<br>
+          <strong style="color:var(--gold)">Sign up free — monetisation unlocks at Creator Pro tier.</strong>
+        </div>
+        <div class="gate-platforms">
+          <a href="#" onclick="openGlowX()" class="platform-btn pbtn-glowx" onclick="markSignup('glowx')">
+            ✨ Sign Up — GlowX
+          </a>
+        </div>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">🎨</div>
+        <div class="dl-info">
+          <div class="dl-name">50 Face Generation Prompts</div>
+          <div class="dl-desc">Proven prompts for 20 nationalities, 5 aesthetics each</div>
+          <div class="dl-plan-note">✅ Starter plan — included</div>
+        </div>
+        <button class="dl-btn dl-btn-unlocked" onclick="downloadItem('face-prompts','50 Face Generation Prompts')">⬇ Download</button>
+      </div>
+
+      <ul class="checklist" id="cl-1">
+        <li onclick="toggleCheck(this,1)"><span class="chk"></span>Generated at least 6 face variations</li>
+        <li onclick="toggleCheck(this,1)"><span class="chk"></span>Selected final base face (saved to device)</li>
+        <li onclick="toggleCheck(this,1)"><span class="chk"></span>Created GlowX account</li>
+        <li onclick="toggleCheck(this,1)"><span class="chk"></span>Uploaded creator headshot to AI Influencer Studio</li>
+        <li onclick="toggleCheck(this,1)"><span class="chk"></span>Generated 5 scene images and tested face match %</li>
+      </ul>
+
+      <button class="complete-btn" id="complete-1" onclick="completeModule(1)">
+        ✅ Complete Phase 2 — Unlock Phase 3
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 2: CREATE — CONTENT & VIDEO ADS             -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view" id="module-2">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-earn">🎬 Phase 3</div>
+        <div class="module-title">CREATE<br>Videos, Reels & Ads</div>
+        <div class="module-sub">Build your first AI-generated content — posts, reels, and video ads for TikTok & YouTube @aigrowth_hq.</div>
+      </div>
+
+      <div class="inst inst-action">
+        <strong>Full pipeline in AI Influencer Studio:</strong><br>
+        1. Go to <strong>Live Studio → New Video</strong><br>
+        2. Enter topic or paste a trending prompt<br>
+        3. Select creator + platform (TikTok/YouTube/Instagram)<br>
+        4. Hit <strong>Generate</strong> — AI creates: script → voiceover → images → video → captions<br>
+        5. Review (30 seconds) → Approve → Auto-post or Download
+      </div>
+
+      <div class="inst inst-money">
+        <strong>Charge clients for this service right now:</strong><br>
+        Single UGC video: <strong>$97</strong> · UGC pack (5 videos): <strong>$397</strong> · Monthly retainer: <strong>$597/mo</strong><br>
+        Ad video (30s): <strong>$297</strong> · Ad retainer (4/mo): <strong>$997/mo</strong><br>
+        <em>You can sell this even on the Starter plan — just deliver the video files manually.</em>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">📝</div>
+        <div class="dl-info">
+          <div class="dl-name">100 Viral TikTok Script Templates</div>
+          <div class="dl-desc">Hook → story → demo → CTA structure for 10 niches</div>
+          <div class="dl-plan-note">✅ Starter plan — included</div>
+        </div>
+        <button class="dl-btn dl-btn-unlocked" onclick="downloadItem('scripts','100 Viral TikTok Script Templates')">⬇ Download</button>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">🎯</div>
+        <div class="dl-info">
+          <div class="dl-name">Client Proposal Template (UGC Agency)</div>
+          <div class="dl-desc">Pitch deck + pricing page to sign $297–$997/mo clients</div>
+          <div class="dl-plan-note" id="proposal-note">🔒 Creator Pro required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" id="proposal-btn" onclick="openModal()">🔒 Upgrade to Download</button>
+      </div>
+
+      <ul class="checklist" id="cl-2">
+        <li onclick="toggleCheck(this,2)"><span class="chk"></span>Created your first video in AI Influencer Studio</li>
+        <li onclick="toggleCheck(this,2)"><span class="chk"></span>Posted first piece of content to @aigrowth_hq TikTok</li>
+        <li onclick="toggleCheck(this,2)"><span class="chk"></span>Posted first reel to Instagram</li>
+        <li onclick="toggleCheck(this,2)"><span class="chk"></span>Created YouTube Shorts version</li>
+      </ul>
+
+      <button class="complete-btn" id="complete-2" onclick="completeModule(2)">
+        ✅ Complete Phase 3 — Unlock Phase 4
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 3: MONETISE — FANVUE + GLOWX                -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view" id="module-3">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-earn">💰 Phase 4</div>
+        <div class="module-title">MONETISE<br>Fanvue, GlowX & Brand Deals</div>
+        <div class="module-sub">Set up your income streams. This is where the money starts flowing.</div>
+      </div>
+
+      <div class="inst inst-warn">
+        Fanvue and GlowX monetisation require <strong>Creator Pro plan ($49/mo)</strong>. Your Starter plan lets you set up profiles but <strong>earning is gated</strong> until you upgrade. This is by design — upgrade pays for itself with 3 subscribers.
+      </div>
+
+      <!-- FANVUE FULL GUIDED SIGNUP -->
+      <div class="signup-gate" id="fanvue-gate">
+        <div class="gate-icon">💎</div>
+        <div class="gate-title">Set Up Fanvue — Your #1 Income Stream</div>
+        <div class="gate-sub">
+          Fanvue pays creators <strong style="color:var(--green)">85% of all earnings</strong>. Openly supports AI creators with KYC.<br>
+          Follow each step exactly — takes 5 minutes. We earn a small affiliate commission at no cost to you.
+        </div>
+
+        <!-- STEP-BY-STEP FANVUE GUIDE -->
+        <div id="fanvue-steps">
+          <!-- Step 1 -->
+          <div class="fv-step" id="fvs-1">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 1 of 7</div>
+              <div class="fv-step-title">🔗 Use Our Referral Link</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="inst inst-action" style="text-align:left;">
+                Click the button below — it opens Fanvue with our referral code <strong style="color:var(--cyan)">AIGROWTH</strong> pre-filled.<br>
+                This gives you priority onboarding and links you to our partner dashboard.
+              </div>
+              <div style="background:#0d0d1a;border:1px solid rgba(123,45,139,0.4);border-radius:12px;padding:16px;margin:12px 0;text-align:left;">
+                <div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:2px;text-transform:uppercase;">Referral Code</div>
+                <div style="font-family:'Courier New',monospace;font-size:22px;color:#c07ada;font-weight:900;letter-spacing:4px;">AIGROWTH</div>
+              </div>
+              <a id="fanvue-open-btn" href="#" target="_blank" onclick="openFanvue()" class="platform-btn pbtn-fanvue" style="width:100%;justify-content:center;margin-top:12px;font-size:15px;padding:14px;">
+                💎 Open Fanvue with Referral Code →
+              </a>
+              <div style="font-size:12px;color:var(--muted);margin-top:10px;">Once you've opened Fanvue, come back here and continue to Step 2.</div>
+              <button onclick="nextFvStep(2)" style="background:var(--border);border:none;color:var(--text);padding:8px 20px;border-radius:8px;cursor:pointer;margin-top:10px;font-weight:600;font-size:13px;">I've opened Fanvue → Next Step</button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="fv-step" id="fvs-2" style="display:none;">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 2 of 7</div>
+              <div class="fv-step-title">🌍 Select Your Country</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="inst inst-tip" style="text-align:left;">
+                Fanvue asks for your <strong>country of residency</strong>. Select your real country — this cannot be changed later. It affects your payout currency and tax forms.
+              </div>
+              <div class="fv-screen-mock">
+                <div class="fv-mock-label">What you'll see on Fanvue:</div>
+                <div class="fv-mock-box">
+                  <div class="fv-mock-title">Country</div>
+                  <div class="fv-mock-sub">What is your country of residency?</div>
+                  <div class="fv-mock-note">⚠️ You will not be able to change this later.</div>
+                  <div class="fv-mock-select">🇬🇧 United Kingdom / 🇧🇲 Bermuda / 🇺🇸 United States</div>
+                </div>
+              </div>
+              <div class="inst inst-action" style="text-align:left;">Select your country → click <strong>Continue</strong></div>
+              <button onclick="nextFvStep(3)" class="fv-done-btn">✓ Done — Continue to Creator Type</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="fv-step" id="fvs-3" style="display:none;">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 3 of 7</div>
+              <div class="fv-step-title">🤖 Select Creator Type</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="fv-screen-mock">
+                <div class="fv-mock-label">What you'll see on Fanvue:</div>
+                <div class="fv-mock-box">
+                  <div class="fv-mock-title">Creator Type</div>
+                  <div class="fv-choice fv-choice-active">
+                    <div style="font-weight:700;">🤖 AI Creator</div>
+                    <div style="font-size:12px;color:#aaa;">Primarily generated or significantly edited using AI tools.</div>
+                  </div>
+                  <div class="fv-choice">
+                    <div style="font-weight:700;">👤 Human Creator</div>
+                    <div style="font-size:12px;color:#aaa;">Content will be of yourself with no use of AI tools.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="inst inst-action" style="text-align:left;">
+                Select <strong style="color:var(--cyan)">🤖 AI Creator</strong> — this is important! It enables AI-specific features and compliance, and unlocks Fanvue's built-in AI tools (auto-replies, voice notes, analytics).
+              </div>
+              <button onclick="nextFvStep(4)" class="fv-done-btn">✓ Selected AI Creator — Next</button>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="fv-step" id="fvs-4" style="display:none;">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 4 of 7</div>
+              <div class="fv-step-title">🔞 Choose Content Type</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="fv-screen-mock">
+                <div class="fv-mock-label">What you'll see on Fanvue:</div>
+                <div class="fv-mock-box">
+                  <div class="fv-mock-title">Content</div>
+                  <div class="fv-choice">
+                    <div style="font-weight:700;">🔞 18+ Content</div>
+                    <div style="font-size:12px;color:#aaa;">Nudity, adult themes, or mature audiences.</div>
+                  </div>
+                  <div class="fv-choice">
+                    <div style="font-weight:700;">✅ General Content</div>
+                    <div style="font-size:12px;color:#aaa;">Suitable for all audiences.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="inst inst-tip" style="text-align:left;">
+                <strong>Starter plan:</strong> Select <strong>General Content</strong> (SFW/UGC only).<br>
+                <strong>Creator Pro:</strong> Select <strong>18+ Content</strong> for maximum earning potential ($10k+/mo).<br>
+                You can create a second account for adult content after upgrading.
+              </div>
+              <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+                <button onclick="nextFvStep(5)" style="flex:1;background:rgba(0,242,234,0.1);border:1px solid var(--cyan);color:var(--cyan);padding:10px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;">✅ General Content (Starter)</button>
+                <button onclick="openModal();nextFvStep(5);" style="flex:1;background:rgba(255,0,255,0.1);border:1px solid var(--mag);color:var(--mag);padding:10px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;">🔞 18+ (Upgrade to Pro)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="fv-step" id="fvs-5" style="display:none;">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 5 of 7</div>
+              <div class="fv-step-title">✏️ Display Name & Handle</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="inst inst-action" style="text-align:left;">
+                Enter your <strong>AI creator's name</strong> (not your real name) as the display name.<br>
+                Create a handle that matches your creator: e.g. <span style="color:var(--cyan);">@bellarose.ai</span> or <span style="color:var(--cyan);">@lunaai.official</span>
+              </div>
+              <div class="fv-screen-mock">
+                <div class="fv-mock-label">What you'll see on Fanvue:</div>
+                <div class="fv-mock-box">
+                  <div class="fv-mock-title">Display name & handle</div>
+                  <div style="background:#1a1a2e;border-radius:6px;padding:10px;margin:6px 0;font-size:13px;text-align:left;">
+                    <div style="color:var(--muted);font-size:10px;margin-bottom:4px;">Display name</div>
+                    <div style="color:var(--cyan);">e.g. Bella Rose AI</div>
+                  </div>
+                  <div style="background:#1a1a2e;border-radius:6px;padding:10px;margin:6px 0;font-size:13px;text-align:left;">
+                    <div style="color:var(--muted);font-size:10px;margin-bottom:4px;">Handle</div>
+                    <div style="color:var(--cyan);">@bellarose.ai</div>
+                  </div>
+                </div>
+              </div>
+              <button onclick="nextFvStep(6)" class="fv-done-btn">✓ Name Set — Next: Pricing</button>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="fv-step" id="fvs-6" style="display:none;">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 6 of 7</div>
+              <div class="fv-step-title">💰 Set Subscription Price</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="inst inst-money" style="text-align:left;">
+                <strong>Our recommended pricing strategy:</strong><br>
+                🆓 <strong>Free</strong> — launch price to build your first 100 subscribers fast<br>
+                💛 <strong>$4.99</strong> — low barrier, great for SFW/lifestyle content<br>
+                💚 <strong>$9.99</strong> — sweet spot for UGC/niche content<br>
+                🔥 <strong>$19.99</strong> — for premium or adult content (Creator Pro)<br>
+                <em style="color:var(--muted);">You can change this any time.</em>
+              </div>
+              <div class="fv-screen-mock">
+                <div class="fv-mock-label">What you'll see:</div>
+                <div class="fv-mock-box">
+                  <div class="fv-mock-title">Subscription price</div>
+                  <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Minimum $3.99 · Maximum $10,000.00</div>
+                  <div style="background:#1a1a2e;border-radius:6px;padding:10px;font-size:18px;color:var(--green);font-weight:700;">$ 9.99</div>
+                </div>
+              </div>
+              <button onclick="nextFvStep(7)" class="fv-done-btn">✓ Price Set — Final Step</button>
+            </div>
+          </div>
+
+          <!-- Step 7 -->
+          <div class="fv-step" id="fvs-7" style="display:none;">
+            <div class="fv-step-header">
+              <div class="fv-step-num">Step 7 of 7</div>
+              <div class="fv-step-title">🪪 Verify Your Identity</div>
+            </div>
+            <div class="fv-step-body">
+              <div class="inst inst-warn" style="text-align:left;">
+                Fanvue requires identity verification to enable payouts. This is industry-standard (same as PayPal, Stripe). You need: <strong>passport, driver's licence, or ID card.</strong><br><br>
+                Your personal info is encrypted and handled to GDPR standards. Fanvue never shares it.
+              </div>
+              <div class="fv-screen-mock">
+                <div class="fv-mock-label">What you'll see:</div>
+                <div class="fv-mock-box">
+                  <div class="fv-mock-title">Verify identity</div>
+                  <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Super quick — ready to earn right away</div>
+                  <div style="background:linear-gradient(135deg,rgba(123,45,139,0.3),rgba(75,158,255,0.2));border-radius:8px;padding:12px;font-size:13px;">
+                    📱 <strong>Tip:</strong> Scan the QR code on your phone for instant approval (faster than uploading on desktop)
+                  </div>
+                </div>
+              </div>
+              <div class="inst inst-tip" style="text-align:left;">
+                Use the <strong>QR code method on your phone</strong> — it's the fastest (usually approved in under 2 minutes).
+              </div>
+              <button onclick="completeFanvueSignup()" class="fv-done-btn" style="background:linear-gradient(135deg,var(--green),var(--cyan));color:#000;">
+                ✅ Identity Verified — Mark Fanvue Complete!
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress dots -->
+        <div style="display:flex;gap:6px;justify-content:center;margin-top:16px;" id="fv-dots">
+          <div class="fv-dot fv-dot-active" id="fvd-1"></div>
+          <div class="fv-dot" id="fvd-2"></div>
+          <div class="fv-dot" id="fvd-3"></div>
+          <div class="fv-dot" id="fvd-4"></div>
+          <div class="fv-dot" id="fvd-5"></div>
+          <div class="fv-dot" id="fvd-6"></div>
+          <div class="fv-dot" id="fvd-7"></div>
+        </div>
+      </div>
+
+      <div class="inst inst-money">
+        <strong>Fanvue Revenue Calculator:</strong><br>
+        100 subs × $9.99 = <strong>$849/mo</strong> (after 85% cut)<br>
+        250 subs × $19.99 = <strong>$4,248/mo</strong><br>
+        500 subs × $19.99 = <strong>$8,496/mo</strong><br>
+        + PPV content + tips + custom videos = often 2–3x subscription revenue
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">💎</div>
+        <div class="dl-info">
+          <div class="dl-name">Fanvue Launch Playbook</div>
+          <div class="dl-desc">Day 1–30 posting schedule, pricing strategy, DM scripts</div>
+          <div class="dl-plan-note">🔒 Creator Pro required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" onclick="openModal()">🔒 Upgrade to Download</button>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">🤝</div>
+        <div class="dl-info">
+          <div class="dl-name">Brand Deal Email Templates (50 swipe files)</div>
+          <div class="dl-desc">Cold outreach + follow-up + negotiation scripts</div>
+          <div class="dl-plan-note">🔒 Creator Pro required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" onclick="openModal()">🔒 Upgrade to Download</button>
+      </div>
+
+      <ul class="checklist" id="cl-3">
+        <li onclick="toggleCheck(this,3)"><span class="chk"></span>Created Fanvue account and profile</li>
+        <li onclick="toggleCheck(this,3)"><span class="chk"></span>Uploaded 10 pieces of content to Fanvue</li>
+        <li onclick="toggleCheck(this,3)"><span class="chk"></span>Set subscription price</li>
+        <li onclick="toggleCheck(this,3)"><span class="chk"></span>Completed identity verification on Fanvue</li>
+        <li onclick="toggleCheck(this,3)"><span class="chk"></span>Connected GlowX profile</li>
+      </ul>
+
+      <!-- Upgrade nudge before completing -->
+      <div style="background:linear-gradient(135deg,rgba(255,0,255,0.06),rgba(0,242,234,0.06));border:1px solid rgba(255,0,255,0.2);border-radius:12px;padding:20px;margin:20px 0;text-align:center;">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">To actually <strong style="color:var(--mag)">earn money</strong> from Fanvue and GlowX, you need Creator Pro.</div>
+        <button class="btn-upgrade" onclick="openModal()" style="font-size:14px;padding:10px 24px;">💰 Upgrade to Creator Pro — $49/mo</button>
+      </div>
+
+      <button class="complete-btn" id="complete-3" onclick="completeModule(3)">
+        ✅ Complete Phase 4 — Unlock Phase 5
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 4: AUTOMATE                                  -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view" id="module-4">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-auto">🔄 Phase 5</div>
+        <div class="module-title">AUTOMATE<br>The 30-Day Trending Engine</div>
+        <div class="module-sub">Stop creating manually. Let 200 AI agents monitor trends and generate content 24/7.</div>
+      </div>
+
+      <div class="inst inst-action">
+        1. Go to <strong>AI Influencer Studio → Content Engine → Trending Feed</strong><br>
+        2. Set niche filters + 30-day date range<br>
+        3. Sort by: views → likes → comments → shares<br>
+        4. Click <strong>Remix with [Creator]</strong> on any trending piece<br>
+        5. Approve in 30 seconds → auto-post to all platforms<br>
+        6. Repeat across all your creators
+      </div>
+
+      <div class="inst inst-tip">
+        <strong>Rule:</strong> Only remix content from the last 30 days. Older than 30 days = trend is dead. The system filters this automatically — you never see stale content.
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">🤖</div>
+        <div class="dl-info">
+          <div class="dl-name">200 Agent Setup Guide</div>
+          <div class="dl-desc">Configure SwarmNet — assign agents to creators + niches</div>
+          <div class="dl-plan-note">🔒 Empire plan required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" onclick="openModal()">🔒 Upgrade to Empire</button>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">📅</div>
+        <div class="dl-info">
+          <div class="dl-name">90-Day Content Calendar Template</div>
+          <div class="dl-desc">Pre-filled posting schedule for TikTok, IG, YouTube, Fanvue</div>
+          <div class="dl-plan-note">✅ Starter plan — included</div>
+        </div>
+        <button class="dl-btn dl-btn-unlocked" onclick="downloadItem('calendar','90-Day Content Calendar')">⬇ Download</button>
+      </div>
+
+      <ul class="checklist" id="cl-4">
+        <li onclick="toggleCheck(this,4)"><span class="chk"></span>Activated Trending Feed in Content Engine</li>
+        <li onclick="toggleCheck(this,4)"><span class="chk"></span>Remixed first trending piece of content</li>
+        <li onclick="toggleCheck(this,4)"><span class="chk"></span>Set up auto-post schedule (3x daily minimum)</li>
+        <li onclick="toggleCheck(this,4)"><span class="chk"></span>Created 30-day content calendar</li>
+      </ul>
+
+      <button class="complete-btn" id="complete-4" onclick="completeModule(4)">
+        ✅ Complete Phase 5 — Unlock Phase 6
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 5: 200 AGENTS                               -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view" id="module-5">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-auto">🤖 Phase 6</div>
+        <div class="module-title">200 AGENTS<br>Your Autonomous Army</div>
+        <div class="module-sub">Deploy specialised AI agents that work while you sleep — generating, posting, replying, and pitching 24/7.</div>
+      </div>
+
+      <div class="inst inst-warn">
+        The 200-agent SwarmNet system is an <strong>Empire plan feature ($197/mo)</strong>. Creator Pro includes 10 core agents. Starter includes 0 agents (manual only).
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0;">
+        <div style="background:rgba(75,158,255,0.06);border:1px solid rgba(75,158,255,0.2);border-radius:10px;padding:12px;">
+          <div style="font-size:18px;margin-bottom:4px;">📡</div>
+          <div style="font-weight:700;font-size:13px;">TrendScout</div>
+          <div style="font-size:11px;color:var(--muted);">Scans TikTok/YT every 6hrs</div>
+        </div>
+        <div style="background:rgba(75,158,255,0.06);border:1px solid rgba(75,158,255,0.2);border-radius:10px;padding:12px;">
+          <div style="font-size:18px;margin-bottom:4px;">✍️</div>
+          <div style="font-weight:700;font-size:13px;">ScriptBot</div>
+          <div style="font-size:11px;color:var(--muted);">Writes scripts from trends</div>
+        </div>
+        <div style="background:rgba(75,158,255,0.06);border:1px solid rgba(75,158,255,0.2);border-radius:10px;padding:12px;">
+          <div style="font-size:18px;margin-bottom:4px;">💬</div>
+          <div style="font-weight:700;font-size:13px;">DMAgent</div>
+          <div style="font-size:11px;color:var(--muted);">Auto-replies + upsells PPV</div>
+        </div>
+        <div style="background:rgba(75,158,255,0.06);border:1px solid rgba(75,158,255,0.2);border-radius:10px;padding:12px;">
+          <div style="font-size:18px;margin-bottom:4px;">🤝</div>
+          <div style="font-weight:700;font-size:13px;">BrandPitch</div>
+          <div style="font-size:11px;color:var(--muted);">Auto-pitches brand deals</div>
+        </div>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">🤖</div>
+        <div class="dl-info">
+          <div class="dl-name">SwarmNet Configuration Guide</div>
+          <div class="dl-desc">Step-by-step agent setup + prompt templates</div>
+          <div class="dl-plan-note">🔒 Empire plan required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" onclick="openModal()">🔒 Upgrade to Empire</button>
+      </div>
+
+      <ul class="checklist" id="cl-5">
+        <li onclick="toggleCheck(this,5)"><span class="chk"></span>Reviewed all 12 agent types in SwarmNet</li>
+        <li onclick="toggleCheck(this,5)"><span class="chk"></span>Activated 3 core agents (TrendScout, DMAgent, Publisher)</li>
+        <li onclick="toggleCheck(this,5)"><span class="chk"></span>Set content rules per creator niche</li>
+      </ul>
+
+      <button class="complete-btn" id="complete-5" onclick="completeModule(5)">
+        ✅ Complete Phase 6 — Unlock Phase 7
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODULE 6: DEAL PITCHER                             -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="module-view" id="module-6">
+      <div class="module-header-block fade-up">
+        <div class="mod-phase-tag tag-earn">🤝 Phase 7</div>
+        <div class="module-title">DEAL PITCHER<br>Automated Brand Income</div>
+        <div class="module-sub">The BrandPitch agent finds brands, sends personalised pitches, and closes deals — automatically.</div>
+      </div>
+
+      <div class="inst inst-action">
+        <strong>Activate BrandPitch agent:</strong><br>
+        1. AI Influencer Studio → SwarmNet → BrandPitch Agent<br>
+        2. Add your creator's niche, follower count, engagement rate<br>
+        3. Set minimum deal value (e.g. $200)<br>
+        4. Agent scans brands running TikTok/IG ads in your niche<br>
+        5. Auto-generates personalised media kit per brand<br>
+        6. Sends pitch + follows up 3x<br>
+        7. Books call when brand responds → SwiftPay invoice on close
+      </div>
+
+      <div class="inst inst-money">
+        <strong>Realistic brand deal income by follower count:</strong><br>
+        10K–50K: <strong>$200–$500/post</strong><br>
+        50K–200K: <strong>$500–$2,000/post</strong><br>
+        200K+: <strong>$2,000–$10,000/post</strong><br>
+        With 29 creators each pitching 10 brands = <strong>290 active deals in pipeline</strong>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">💼</div>
+        <div class="dl-info">
+          <div class="dl-name">AI Influencer Media Kit Template</div>
+          <div class="dl-desc">Canva template + stats page + rate card</div>
+          <div class="dl-plan-note">🔒 Creator Pro required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" onclick="openModal()">🔒 Upgrade to Download</button>
+      </div>
+
+      <div class="download-gate">
+        <div class="dl-icon">📧</div>
+        <div class="dl-info">
+          <div class="dl-name">500 Brand Contact Database (Bermuda + UK + US)</div>
+          <div class="dl-desc">Pre-researched brand emails for AI influencer outreach</div>
+          <div class="dl-plan-note">🔒 Empire plan required</div>
+        </div>
+        <button class="dl-btn dl-btn-locked" onclick="openModal()">🔒 Upgrade to Empire</button>
+      </div>
+
+      <ul class="checklist" id="cl-6">
+        <li onclick="toggleCheck(this,6)"><span class="chk"></span>Created media kit for first creator</li>
+        <li onclick="toggleCheck(this,6)"><span class="chk"></span>Activated BrandPitch agent</li>
+        <li onclick="toggleCheck(this,6)"><span class="chk"></span>First 10 pitches sent</li>
+        <li onclick="toggleCheck(this,6)"><span class="chk"></span>First brand deal closed (any amount)</li>
+      </ul>
+
+      <!-- COURSE COMPLETE CTA -->
+      <div style="background:linear-gradient(135deg,rgba(0,255,136,0.08),rgba(0,242,234,0.08));border:1px solid rgba(0,255,136,0.25);border-radius:16px;padding:28px;margin:24px 0;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">🏆</div>
+        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);margin-bottom:8px;">Course Complete!</div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:20px;">You now have everything you need. The only thing between you and $10k/mo is executing the steps and upgrading to unlock your earning potential.</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn-upgrade" onclick="openModal()" style="font-size:15px;padding:12px 28px;">🚀 Upgrade to Creator Pro — $49/mo</button>
+          <a href="https://tiktok.com/@aigrowth_hq" target="_blank" style="background:var(--border);color:var(--text);font-weight:700;font-size:14px;padding:12px 20px;border-radius:10px;text-decoration:none;">Follow @aigrowth_hq</a>
+        </div>
+      </div>
+
+      <button class="complete-btn" id="complete-6" onclick="completeModule(6)" style="background:linear-gradient(135deg,var(--green),var(--cyan));">
+        🏆 Complete Course — Claim Your Certificate
+      </button>
+    </div>
+
+  </main>
+</div><!-- /mainApp -->
+</div><!-- /layout -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════
+// ══ YOUR AFFILIATE CODES — CHANGE THESE ══════════════
+const AFFILIATE = {
+  fanvue_ref_code: 'AIGROWTH',           // ← YOUR Fanvue referral code
+  fanvue_url: 'https://fanvue.com/sign-up?referralCode=AIGROWTH',
+  glowx_url:  'https://glowx.com/ref/aigrowth_hq',  // ← your GlowX affiliate link
+  studio_url: 'https://ai-influencer-studio-production.up.railway.app',
+  stripe_97:  'https://buy.stripe.com/YOUR_LINK',    // ← your $97 Stripe link
+  stripe_49:  'https://buy.stripe.com/YOUR_PRO_LINK', // ← $49/mo Stripe link
+  stripe_197: 'https://buy.stripe.com/YOUR_EMPIRE_LINK' // ← $197/mo Stripe link
+};
+// ════════════════════════════════════════════════════
+
+let state = {
+  purchased: false,
+  plan: 'starter', // starter | pro | empire
+  currentModule: 0,
+  completedModules: [],
+  signups: {},
+  checks: {}
+};
+
+// Load from sessionStorage
+try {
+  const saved = JSON.parse(sessionStorage.getItem('aigrowth_state') || '{}');
+  state = { ...state, ...saved };
+} catch(e) {}
+
+function saveState() {
+  try { sessionStorage.setItem('aigrowth_state', JSON.stringify(state)); } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════════════════
+// PURCHASE FLOW
+// ══════════════════════════════════════════════════════════════════
+function completePurchase() {
+  // In production: redirect to Stripe payment link
+  // After Stripe webhook confirms payment, set purchased = true
+  state.purchased = true;
+  state.plan = 'starter';
+  saveState();
+  document.getElementById('purchaseWall').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  updateUI();
+  showModule(0);
+}
+
+function skipPurchase() {
+  // Demo mode — remove in production
+  completePurchase();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MODULE NAVIGATION
+// ══════════════════════════════════════════════════════════════════
+function showModule(idx) {
+  document.querySelectorAll('.module-view').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.module-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('module-' + idx)?.classList.add('active');
+  document.getElementById('link-' + idx)?.classList.add('active');
+  state.currentModule = idx;
+  saveState();
+  window.scrollTo(0, 0);
+}
+
+function tryModule(idx) {
+  if (state.completedModules.includes(idx - 1) || idx === 0) {
+    showModule(idx);
+  } else {
+    // Shake the locked module
+    const link = document.getElementById('link-' + idx);
+    link.style.animation = 'none';
+    setTimeout(() => { link.style.animation = 'shake 0.4s ease'; }, 10);
+    // Show message
+    alert(`Complete Phase ${idx} first to unlock Phase ${idx + 1}`);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// COMPLETE MODULE
+// ══════════════════════════════════════════════════════════════════
+function completeModule(idx) {
+  if (!state.completedModules.includes(idx)) {
+    state.completedModules.push(idx);
+  }
+  saveState();
+  updateUI();
+
+  // Short celebration then advance
+  const btn = document.getElementById('complete-' + idx);
+  btn.textContent = '✅ Done! Unlocking next phase...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    if (idx < 6) {
+      showModule(idx + 1);
+    } else {
+      // Course complete
+      showCourseComplete();
+    }
+  }, 1200);
+}
+
+function showCourseComplete() {
+  alert('🏆 Congratulations! Course complete. Your certificate is being generated.\n\nRemember: upgrade to Creator Pro to start earning real money from Fanvue and GlowX.');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CHECKLISTS
+// ══════════════════════════════════════════════════════════════════
+function toggleCheck(li, moduleIdx) {
+  li.classList.toggle('done');
+  const box = li.querySelector('.chk');
+  box.textContent = li.classList.contains('done') ? '✓' : '';
+  // Save check state
+  const items = li.closest('.checklist').querySelectorAll('li');
+  const checks = {};
+  items.forEach((item, i) => { checks[i] = item.classList.contains('done'); });
+  state.checks['mod_' + moduleIdx] = checks;
+  saveState();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SIGNUP TRACKING
+// ══════════════════════════════════════════════════════════════════
+function markSignup(platform) {
+  state.signups[platform] = true;
+  saveState();
+  // Visual feedback
+  const gates = document.querySelectorAll('.signup-gate');
+  gates.forEach(gate => {
+    if (gate.querySelector('.' + 'pbtn-' + platform)) {
+      const skip = gate.querySelector('.gate-skip');
+      if (skip) skip.style.display = 'none';
+      gate.querySelector('.gate-platforms').innerHTML = `<div style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:10px;padding:10px 20px;color:var(--green);font-weight:700;font-size:14px;">✅ Signed up — ${platform.toUpperCase()}</div>`;
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DOWNLOADS (gated by plan)
+// ══════════════════════════════════════════════════════════════════
+const DOWNLOAD_PLAN_REQUIREMENTS = {
+  'creator-personas':   'starter',
+  'niche-research':     'starter',
+  'face-prompts':       'starter',
+  'scripts':            'starter',
+  'calendar':           'starter',
+  'adult-blueprint':    'pro',
+  'proposal':           'pro',
+  'fanvue-playbook':    'pro',
+  'brand-deal-emails':  'pro',
+  'media-kit':          'pro',
+  'agent-setup':        'empire',
+  'swarmnet-guide':     'empire',
+  'brand-database':     'empire'
+};
+
+const PLAN_HIERARCHY = { starter: 0, pro: 1, empire: 2 };
+
+function downloadItem(id, name) {
+  const required = DOWNLOAD_PLAN_REQUIREMENTS[id] || 'starter';
+  const userLevel = PLAN_HIERARCHY[state.plan] || 0;
+  const requiredLevel = PLAN_HIERARCHY[required] || 0;
+
+  if (userLevel >= requiredLevel) {
+    // In production: generate signed download URL from server
+    const link = document.createElement('a');
+    link.href = `#download-${id}`; // Replace with real URL
+    link.download = name + '.pdf';
+    alert(`⬇ Downloading: ${name}\n\n(In production this downloads from your server. Link your actual files here.)`);
+  } else {
+    openModal();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════════════════
+function openModal() {
+  document.getElementById('upgradeModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('upgradeModal').classList.remove('open');
+}
+document.getElementById('upgradeModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function selectPlan(plan) {
+  // In production: redirect to Stripe checkout for plan upgrade
+  state.plan = plan;
+  saveState();
+  closeModal();
+  updatePlanUI();
+  alert(`🎉 Upgraded to ${plan.toUpperCase()}!\n\n(In production: Stripe checkout opens here)\n\nAll ${plan} downloads and features are now unlocked.`);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// UI UPDATES
+// ══════════════════════════════════════════════════════════════════
+function updateUI() {
+  updateProgress();
+  updateSidebarLinks();
+  updatePlanUI();
+}
+
+function updateProgress() {
+  const pct = Math.round((state.completedModules.length / 7) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${state.completedModules.length} / 7 complete`;
+}
+
+function updateSidebarLinks() {
+  for (let i = 0; i < 7; i++) {
+    const link = document.getElementById('link-' + i);
+    const status = document.getElementById('status-' + i);
+    if (!link) continue;
+    link.className = 'module-link';
+    if (state.completedModules.includes(i)) {
+      link.classList.add('completed');
+      status.textContent = '✓';
+    } else if (i === 0 || state.completedModules.includes(i - 1)) {
+      status.textContent = '●';
+    } else {
+      link.classList.add('locked');
+      status.textContent = '🔒';
+    }
+    if (i === state.currentModule) link.classList.add('active');
+  }
+}
+
+function updatePlanUI() {
+  const badge = document.getElementById('planBadge');
+  const planMap = {
+    starter: { label: 'STARTER', cls: 'badge-starter' },
+    pro:     { label: 'CREATOR PRO', cls: 'badge-pro' },
+    empire:  { label: 'EMPIRE', cls: 'badge-empire' }
+  };
+  const p = planMap[state.plan] || planMap.starter;
+  badge.textContent = p.label;
+  badge.className = 'nav-plan-badge ' + p.cls;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// COPY PROMPT
+// ══════════════════════════════════════════════════════════════════
+function copyEl(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(id).nextElementSibling;
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = 'Copy', 2000); }
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  if (state.purchased) {
+    document.getElementById('purchaseWall').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    updateUI();
+    showModule(state.currentModule || 0);
+  }
+  // Restore checklists
+  Object.entries(state.checks).forEach(([key, checks]) => {
+    const modIdx = parseInt(key.replace('mod_', ''));
+    const cl = document.getElementById('cl-' + modIdx);
+    if (cl) {
+      const items = cl.querySelectorAll('li');
+      items.forEach((item, i) => {
+        if (checks[i]) {
+          item.classList.add('done');
+          item.querySelector('.chk').textContent = '✓';
+        }
+      });
+    }
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════
+// FANVUE STEP-BY-STEP FLOW
+// ══════════════════════════════════════════════════════════════════
+let currentFvStep = 1;
+
+function openGlowX() {
+  window.open(AFFILIATE.glowx_url, '_blank');
+  markSignup('glowx');
+}
+
+function openFanvue() {
+  const url = AFFILIATE.fanvue_url;
+  window.open(url, '_blank');
+  // Update button to show opened state
+  const btn = document.getElementById('fanvue-open-btn');
+  if (btn) { btn.textContent = '✓ Fanvue Opened — Come Back Here'; btn.style.background = 'rgba(0,255,136,0.1)'; btn.style.borderColor = 'var(--green)'; btn.style.color = 'var(--green)'; }
+}
+
+function nextFvStep(step) {
+  // Hide current
+  document.getElementById('fvs-' + currentFvStep).style.display = 'none';
+  document.getElementById('fvd-' + currentFvStep)?.classList.remove('fv-dot-active');
+  // Show next
+  document.getElementById('fvs-' + step).style.display = 'block';
+  document.getElementById('fvd-' + step)?.classList.add('fv-dot-active');
+  currentFvStep = step;
+  // Scroll gate into view
+  document.getElementById('fanvue-gate')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function completeFanvueSignup() {
+  markSignup('fanvue');
+  state.signups.fanvue_complete = true;
+  saveState();
+  // Replace gate with success
+  document.getElementById('fanvue-gate').innerHTML = `
+    <div style="text-align:center;padding:20px;">
+      <div style="font-size:48px;margin-bottom:12px;">💎</div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green);margin-bottom:8px;">Fanvue Set Up!</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Your account is live. Upload your first 10 pieces of content to start building your subscriber base.</div>
+      <a href="${AFFILIATE.fanvue_url}" target="_blank" style="display:inline-block;background:rgba(123,45,139,0.2);border:1px solid #7B2D8B;color:#c07ada;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Open My Fanvue Profile →</a>
+    </div>
+  `;
+}
+
+// Update purchase button to use Stripe link
+function completePurchase() {
+  // In production: window.location.href = AFFILIATE.stripe_97;
+  // For demo:
+  state.purchased = true;
+  state.plan = 'starter';
+  saveState();
+  document.getElementById('purchaseWall').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  updateUI();
+  showModule(0);
+}
+
+// Update plan selection to use Stripe links
+function selectPlan(plan) {
+  const links = { pro: AFFILIATE.stripe_49, empire: AFFILIATE.stripe_197 };
+  // In production: window.location.href = links[plan];
+  state.plan = plan;
+  saveState();
+  closeModal();
+  updatePlanUI();
+  // Unlock Pro downloads
+  if (plan === 'pro' || plan === 'empire') {
+    document.querySelectorAll('.dl-btn-locked').forEach(btn => {
+      const note = btn.previousElementSibling?.querySelector('.dl-plan-note');
+      if (note && note.textContent.includes('Creator Pro')) {
+        btn.className = 'dl-btn dl-btn-unlocked';
+        btn.textContent = '⬇ Download';
+        btn.onclick = function() { alert('Downloading...'); };
+        if (note) note.textContent = '✅ Unlocked — ' + plan;
+      }
+    });
+  }
+  alert(\`🎉 Upgraded to \${plan.toUpperCase()}! All \${plan} downloads and features are now unlocked.\`);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// Shake animation
+const style = document.createElement('style');
+style.textContent = '@keyframes shake { 0%,100%{transform:none} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }';
+document.head.appendChild(style);
+</script>
+</body>
+</html>
