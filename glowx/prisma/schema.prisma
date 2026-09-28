@@ -262,3 +262,15 @@ model MeshAsset {
   posts     Post[]
   createdAt DateTime @default(now())
 }
+
+model Persona {
+  id String @id @default(cuid())
+  ownerId String
+  displayName String
+  isAi Boolean @default(true)
+  disclosureBadge Boolean @default(true)
+  morphJson Json
+  loraPath String?
+  status String @default("active")
+  createdAt DateTime @default(now())
+}
