@@ -1,4 +1,3 @@
-@"
 export function PersonaCard({ persona }: any) {
   return (
     <div className="bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800">
@@ -14,4 +13,3 @@ export function PersonaCard({ persona }: any) {
     </div>
   )
 }
-"@ | Set-Content glowx\components\PersonaCard.tsx -Encoding utf8

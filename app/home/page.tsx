@@ -18,13 +18,21 @@ const suggested = [
   {name:"Ava Stone", handle:"@ava", banner:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80", avatar:"https://i.pravatar.cc/150?img=29"},
 ]
 
+type Post = { id: string; author: string; text: string; images: string[]; isAi: boolean; createdAt: string }
+
 export default function HomeFixed(){
   const [heroIdx, setHeroIdx] = useState(0)
   const [featIdx, setFeatIdx] = useState(0)
   const [sPage, setSPage] = useState(0)
   const [followed, setFollowed] = useState<Set<string>>(new Set())
+  const [posts, setPosts] = useState<Post[]>([])
   const featRef = useRef<HTMLDivElement>(null)
   const totalSPages = Math.ceil(suggested.length/3)
+
+  // Load real posts from the platform
+  useEffect(()=>{
+    fetch('/api/posts').then(r=>r.json()).then(d=>setPosts(d.posts||[])).catch(()=>{})
+  },[])
 
   // Hero rotates every 6s
   useEffect(()=>{
@@ -103,6 +111,34 @@ export default function HomeFixed(){
                 {[0,1,2].map(i=><button key={i} onClick={()=>setHeroIdx(i)} className={`h-1.5 rounded-full transition-all ${i===heroIdx?'w-6 bg-black':'w-1.5 bg-black/30'}`} />)}
               </div>
             </div>
+
+            {/* REAL POSTS FEED */}
+            {posts.length > 0 && (
+              <div className="mt-8">
+                <h3 className="font-bold text-[18px] mb-3">Latest from Creators</h3>
+                <div className="flex flex-col gap-4">
+                  {posts.map(p=>(
+                    <div key={p.id} className="bg-white rounded-[20px] border border-[#F1E6EF] overflow-hidden">
+                      <div className="p-4 flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-[#0AE775] grid place-items-center font-bold text-sm">{(p.author||'G')[0].toUpperCase()}</div>
+                        <div>
+                          <div className="font-bold text-[14px] flex items-center gap-2">{p.author}
+                            {p.isAi && <span className="text-[10px] bg-black text-white px-2 py-0.5 rounded-full">AI-Generated</span>}
+                          </div>
+                          <div className="text-[12px] text-black/50">{new Date(p.createdAt).toLocaleString()}</div>
+                        </div>
+                      </div>
+                      {p.text && <p className="px-4 pb-3 text-[14px] whitespace-pre-wrap">{p.text}</p>}
+                      {p.images.length > 0 && (
+                        <div className={`grid gap-1 ${p.images.length>1?'grid-cols-2':''}`}>
+                          {p.images.map(src=><img key={src} src={src} alt="" className="w-full object-cover max-h-[500px]" />)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* FEATURED CAROUSEL - FIXED MOVING */}
             <div className="mt-8">

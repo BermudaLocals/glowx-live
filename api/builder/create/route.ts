@@ -1,4 +1,3 @@
-@"
 import { NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 
@@ -20,4 +19,3 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ url: session.url })
 }
-"@ | Set-Content glowx\app\api\builder\create\route.ts -Encoding utf8

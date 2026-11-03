@@ -5,3 +5,6 @@ dist/
 build/
 *.zip
 glowx-backend-backup*
+
+# local env
+.env.local

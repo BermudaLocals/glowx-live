@@ -1,4 +1,3 @@
-@"
 'use client'
 import { useState } from 'react'
 
@@ -58,4 +57,3 @@ export default function BuilderPage() {
     </div>
   )
 }
-"@ | Set-Content glowx\app\builder\page.tsx -Encoding utf8

@@ -1,4 +1,2 @@
-@"
 import Stripe from 'stripe'
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-06-20' })
-"@ | Set-Content glowx\lib\stripe.ts -Encoding utf8
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
