@@ -7,7 +7,9 @@ import { readPosts, addPost, deletePost } from '@/lib/posts'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads')
+const UPLOAD_DIR = process.env.GLOWX_DATA_DIR
+  ? path.join(process.env.GLOWX_DATA_DIR, 'uploads')
+  : path.join(process.cwd(), 'public', 'uploads')
 const MAX_IMAGES = 10
 const MAX_FILE_SIZE = 15 * 1024 * 1024
 const EXT_BY_MIME: Record<string, string> = {
@@ -63,7 +65,7 @@ export async function POST(req: Request) {
     const name = `${crypto.randomUUID()}.${ext}`
     fs.mkdirSync(UPLOAD_DIR, { recursive: true })
     fs.writeFileSync(path.join(UPLOAD_DIR, name), Buffer.from(await file.arrayBuffer()))
-    urls.push(`/uploads/${name}`)
+    urls.push(`/api/uploads/${name}`)
   }
 
   const post = addPost({

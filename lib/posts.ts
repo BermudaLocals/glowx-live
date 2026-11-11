@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-const DATA_DIR = path.join(process.cwd(), 'data')
+const DATA_DIR = process.env.GLOWX_DATA_DIR || path.join(process.cwd(), 'data')
 const POSTS_FILE = path.join(DATA_DIR, 'posts.json')
 
 export type Post = {
