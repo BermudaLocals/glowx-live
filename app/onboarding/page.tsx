@@ -5,7 +5,7 @@ import GlowXLogo from '../components/GlowXLogo'
 const SLIDES = [
   {headline:"Turn your content into monthly income", emoji:"💰💰💰"},
   {headline:"One platform. Built to make creators money", emoji:"🌍"},
-  {headline:"Keep 95% from day one. 97% on Pro", emoji:"🪙"},
+  {headline:"Keep 90% of everything you earn", emoji:"🪙"},
   {headline:"Analytics built to grow your income", emoji:"📊"},
   {headline:"Refer a creator. Earn when they earn", emoji:"🥧"},
   {headline:"Verified fast. Earning faster", emoji:"✅"},

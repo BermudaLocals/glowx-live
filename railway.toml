@@ -13,4 +13,4 @@ healthcheckInterval = 15
 [env]
 NODE_ENV = "production"
 PLATFORM_NAME = "GlowX"
-CREATOR_PAYOUT_PERCENTAGE = "70"
+CREATOR_PAYOUT_PERCENTAGE = "90"

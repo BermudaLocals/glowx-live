@@ -16,10 +16,12 @@ const CREATORS = [
   { name: 'Mia Chen', title: 'Fitness Coach', img: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80' },
 ]
 
-const PLANS = [
-  { name: 'GlowX Starter', fee: '5% fee', tag: 'Keep 95% of what you earn', desc: 'Perfect for creators just getting started.', features: ['Basic analytics dashboard', 'Up to 3 subscription tiers', 'Standard content hosting', 'Community support', 'Monthly payouts'], cta: 'Get Started Free', hot: false },
-  { name: 'GlowX Pro', fee: '3% fee', tag: 'Keep 97% of what you earn', desc: 'For serious creators ready to scale their empire.', features: ['Advanced analytics & insights', 'Unlimited subscription tiers', 'AI Content Assistant', 'GlowX Shield protection', 'Live streaming integration', 'Priority support', 'Weekly payouts'], cta: 'Become a Creator', hot: true },
-  { name: 'GlowX Enterprise', fee: 'Custom', tag: 'For agencies & top creators', desc: 'Tailored solutions for top-tier creators and agencies.', features: ['Everything in Pro', 'Dedicated account manager', 'White-label options', 'Custom API integrations', 'Daily payouts'], cta: 'Contact Us', hot: false },
+const PLAN_FEATURES = [
+  'Subscriptions, pay-per-view and tips',
+  'AI persona studio included',
+  'Unlimited posts and messages',
+  'No monthly cost — we only earn when you do',
+  'No tiers, no locked features — everyone gets everything',
 ]
 
 export default function LandingPage() {
@@ -125,34 +127,32 @@ export default function LandingPage() {
         <div className="max-w-[1200px] mx-auto px-5">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
-              Transparent Pricing. <span className="text-glow-gradient">You Keep More.</span>
+              One Simple Fee. <span className="text-glow-gradient">You Keep 90%.</span>
             </h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">No hidden cuts. Pick the plan that matches where you are — upgrade when you grow.</p>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">The big platforms take 20%. GlowX takes 10% — that covers payment processing, hosting and support, and keeps the lights on. The rest is yours.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-            {PLANS.map(p => (
-              <div key={p.name} className={`relative rounded-3xl p-8 flex flex-col ${p.hot ? 'glow-gradient shadow-2xl shadow-purple-500/30 md:-translate-y-3' : 'glass-card glow-border'}`}>
-                {p.hot && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-[#0A0A0F] text-xs font-extrabold px-4 py-1 rounded-full">MOST POPULAR</div>}
-                <h3 className="text-xl font-extrabold">{p.name}</h3>
-                <div className="mt-4 flex items-baseline gap-2">
-                  <span className="text-4xl font-extrabold">{p.fee}</span>
-                  <span className={`text-sm ${p.hot ? 'text-white/80' : 'text-white/50'}`}>platform fee</span>
+          <div className="max-w-[560px] mx-auto">
+            <div className="relative rounded-3xl p-[2px] glow-gradient shadow-2xl shadow-purple-500/30">
+              <div className="rounded-3xl bg-[#0A0A0F] p-10 text-center">
+                <div className="inline-block text-xs font-extrabold px-4 py-1 rounded-full glow-gradient mb-6">EVERYONE. EVERYTHING. ONE RATE.</div>
+                <div className="flex items-baseline justify-center gap-3">
+                  <span className="text-7xl font-extrabold text-glow-gradient">90%</span>
+                  <span className="text-xl text-white/60 font-semibold">yours</span>
                 </div>
-                <div className={`text-sm font-bold mt-1 ${p.hot ? 'text-white' : 'text-glow-gradient'}`}>{p.tag}</div>
-                <p className={`text-sm mt-3 ${p.hot ? 'text-white/85' : 'text-white/55'}`}>{p.desc}</p>
-                <ul className={`mt-6 space-y-3 text-sm flex-1 ${p.hot ? 'text-white/90' : 'text-white/65'}`}>
-                  {p.features.map(f => (
+                <p className="text-white/60 mt-3">10% flat platform fee. No monthly cost, no tiers, no locked features.</p>
+                <ul className="mt-8 space-y-3 text-sm text-white/70 text-left max-w-[380px] mx-auto">
+                  {PLAN_FEATURES.map(f => (
                     <li key={f} className="flex gap-2.5">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><path d="M20 6L9 17l-5-5" /></svg>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0 text-pink-500"><path d="M20 6L9 17l-5-5" /></svg>
                       {f}
                     </li>
                   ))}
                 </ul>
-                <a href="/onboarding" className={`mt-8 h-12 rounded-full font-bold grid place-items-center transition ${p.hot ? 'bg-white text-[#0A0A0F] hover:scale-[1.03]' : 'glow-gradient text-white hover:scale-[1.03]'}`}>
-                  {p.cta}
+                <a href="/onboarding" className="mt-10 glow-gradient h-12 rounded-full font-bold grid place-items-center text-white hover:scale-[1.03] transition">
+                  Become a Creator
                 </a>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
