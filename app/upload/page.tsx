@@ -136,7 +136,7 @@ export default function UploadPage() {
           <button
             onClick={publish}
             disabled={busy || !key}
-            className="h-11 rounded-full bg-[#0AE775] font-bold hover:scale-[1.01] transition disabled:opacity-50"
+            className="h-11 rounded-full glow-gradient text-white font-bold hover:scale-[1.01] transition disabled:opacity-50"
           >
             {busy ? 'Publishing...' : 'Publish post'}
           </button>

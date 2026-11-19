@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import GlowXLogo from '../components/GlowXLogo'
 
 // === ADD YOUR REAL DATA HERE ===
 const featured = [
@@ -67,9 +68,9 @@ export default function HomeFixed(){
 
   return (
     <div className="min-h-screen bg-[#FFF7FA] flex">
-      {/* LEFT SIDEBAR - 72px fixed like Fanvue */}
+      {/* LEFT SIDEBAR - 72px fixed */}
       <aside className="w-[72px] bg-white border-r border-[#F1E6EF] fixed left-0 top-0 bottom-0 z-50 flex flex-col items-center py-4 gap-3">
-        <div className="w-8 h-8 rounded-lg bg-[#0AE775] grid place-items-center font-bold text-sm">F</div>
+        <a href="/" aria-label="GlowX home"><GlowXLogo size={34} withWordmark={false} /></a>
         <button className="w-11 h-11 rounded-xl bg-[#FFE3F0] text-[#FF2E93] grid place-items-center">🏠</button>
         <button className="w-11 h-11 rounded-xl hover:bg-[#FFF0F6] grid place-items-center">💬</button>
         <button className="w-11 h-11 rounded-xl hover:bg-[#FFF0F6] grid place-items-center">🔔</button>
@@ -83,8 +84,8 @@ export default function HomeFixed(){
         </div>
       </aside>
 
-      <main className="ml-[72px] flex-1 p-6 max-w-[1600px]">
-        {/* TOP BAR like Fanvue */}
+      <main className="ml-[72px] flex-1 p-6 max-w-[1600px] text-[#2A1030]">
+        {/* TOP BAR */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-[22px] font-bold">Home</h1>
           <div className="flex items-center gap-3">
@@ -97,14 +98,14 @@ export default function HomeFixed(){
         <div className="flex gap-6 items-start">
           {/* MAIN COLUMN - 70% */}
           <div className="flex-1 min-w-0">
-            {/* HERO - matches Fanvue hero */}
+            {/* HERO */}
             <div className="relative h-[70vh] min-h-[520px] rounded-[24px] overflow-hidden bg-black">
               <img src={["https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1200","https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1200","https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200"][heroIdx]} alt="" className="absolute inset-0 w-full h-full object-cover opacity-90" />
               <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent" />
               <div className="absolute inset-0 grid place-items-center text-center p-8">
                 <div className="max-w-[520px]">
-                  <h2 className="text-[clamp(28px,4vw,40px)] font-extrabold leading-[1.05] text-black">The No1 AI monetisation platform made for Creators trusted by Icons.</h2>
-                  <a href="/onboarding" className="inline-flex mt-5 h-11 px-6 rounded-full bg-[#0AE775] text-black font-bold hover:scale-[1.02] transition">Become a creator</a>
+                  <h2 className="text-[clamp(28px,4vw,40px)] font-extrabold leading-[1.05] text-black">Your Content. Your Empire. <span className="text-glow-gradient">Your Terms.</span></h2>
+                  <a href="/onboarding" className="inline-flex mt-5 h-11 px-6 rounded-full glow-gradient text-white font-bold hover:scale-[1.02] transition">Become a creator</a>
                 </div>
               </div>
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
@@ -120,7 +121,7 @@ export default function HomeFixed(){
                   {posts.map(p=>(
                     <div key={p.id} className="bg-white rounded-[20px] border border-[#F1E6EF] overflow-hidden">
                       <div className="p-4 flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-[#0AE775] grid place-items-center font-bold text-sm">{(p.author||'G')[0].toUpperCase()}</div>
+                        <div className="w-9 h-9 rounded-full glow-gradient grid place-items-center font-bold text-sm text-white">{(p.author||'G')[0].toUpperCase()}</div>
                         <div>
                           <div className="font-bold text-[14px] flex items-center gap-2">{p.author}
                             {p.isAi && <span className="text-[10px] bg-black text-white px-2 py-0.5 rounded-full">AI-Generated</span>}
@@ -183,7 +184,7 @@ export default function HomeFixed(){
                     <img src={c.banner} alt="" className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                    {/* Avatar like Fanvue */}
+                    {/* Avatar */}
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-3">
                       <img src={c.avatar} alt={c.name} className="w-[72px] h-[72px] rounded-full border-2 border-white object-cover" />
                       <div className="text-white">

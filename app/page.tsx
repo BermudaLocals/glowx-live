@@ -1,185 +1,192 @@
-'use client'
-import { useEffect, useState, useRef } from 'react'
+import GlowXLogo from './components/GlowXLogo'
 
-// ADD YOUR VIDEO URLS HERE - keep <5MB each, H.264 MP4 + WebM
-const HERO_VIDEOS = [
-  { src: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", poster: "https://images.unsplash.com/photo-1518834107812-67b0b288f498?w=1200&q=80" },
-  { src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", poster: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1200&q=80" },
-  { src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", poster: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&q=80" },
+const FEATURES = [
+  { title: 'GlowX AI Content Assistant', desc: 'Generate captions, plan posting schedules and draft content briefs with AI tools built for creators.', icon: 'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z' },
+  { title: 'Multi-Tier Subscriptions', desc: 'Create subscription tiers with custom pricing, perks and exclusive content for each level of fan.', icon: 'M4 6h16v3H4zM4 11h16v3H4zM4 16h10v3H4z' },
+  { title: 'Direct Messaging & Live', desc: 'Connect with your audience through DMs and live moments — no third-party tools needed.', icon: 'M21 12a8 8 0 01-8 8H5l-2 2V12a8 8 0 018-8h2a8 8 0 018 8z' },
+  { title: 'Pay-Per-View & Tipping', desc: 'Monetise individual posts with PPV pricing and let fans show appreciation through instant tips.', icon: 'M12 2v20M17 7H9.5a3 3 0 000 6h5a3 3 0 010 6H6' },
+  { title: 'GlowX Shield Protection', desc: 'Watermarking and content-protection tooling to help keep your premium work yours.', icon: 'M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z' },
+  { title: 'Creator Analytics', desc: 'Clear insight into subscriber behaviour, content performance and revenue trends.', icon: 'M4 20V10M10 20V4M16 20v-7M22 20H2' },
 ]
 
-// ADD YOUR CREATOR DATA HERE
-const featuredCreators = [
-  {name:"Sofia Martinez", title:"Professional golfer", image:"https://images.unsplash.com/photo-1526510747491-58f928ec870f?w=600&q=80", handle:"@sofia"},
-  {name:"Aitana Lopez", title:"AI Influencer", image:"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80", handle:"@fit_aitana"},
-  {name:"Elena Rossi", title:"Football Journalist", image:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80", handle:"@elenar"},
-  {name:"Mia Chen", title:"Fitness Coach", image:"https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80", handle:"@mia"},
-  {name:"Bella Bianchi", title:"Lifestyle", image:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80", handle:"@italianluna"},
+const CREATORS = [
+  { name: 'Sofia Martinez', title: 'Professional golfer', img: 'https://images.unsplash.com/photo-1526510747491-58f928ec870f?w=600&q=80' },
+  { name: 'Aitana Lopez', title: 'AI Influencer', img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80' },
+  { name: 'Elena Rossi', title: 'Football Journalist', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80' },
+  { name: 'Mia Chen', title: 'Fitness Coach', img: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80' },
 ]
 
-const suggestedCreators = [
-  {name:"Lena Wilde", handle:"@lena", banner:"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=16"},
-  {name:"Ruby Cole", handle:"@ruby", banner:"https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=8"},
-  {name:"Ava Stone", handle:"@ava", banner:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=29"},
-  {name:"Mila J", handle:"@mila", banner:"https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=33"},
-  {name:"Chloe Hart", handle:"@chloe", banner:"https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=14"},
-  {name:"Isla Moore", handle:"@isla", banner:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=21"},
-  {name:"Sienna B", handle:"@sienna", banner:"https://images.unsplash.com/photo-1526510747491-58f928ec870f?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=45"},
-  {name:"Freya L", handle:"@freya", banner:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=18"},
-  {name:"Poppy R", handle:"@poppy", banner:"https://images.unsplash.com/photo-1509967419535-6ab2e8d8b1c3?w=400&q=80", avatar:"https://i.pravatar.cc/150?img=6"},
+const PLANS = [
+  { name: 'GlowX Starter', fee: '5% fee', tag: 'Keep 95% of what you earn', desc: 'Perfect for creators just getting started.', features: ['Basic analytics dashboard', 'Up to 3 subscription tiers', 'Standard content hosting', 'Community support', 'Monthly payouts'], cta: 'Get Started Free', hot: false },
+  { name: 'GlowX Pro', fee: '3% fee', tag: 'Keep 97% of what you earn', desc: 'For serious creators ready to scale their empire.', features: ['Advanced analytics & insights', 'Unlimited subscription tiers', 'AI Content Assistant', 'GlowX Shield protection', 'Live streaming integration', 'Priority support', 'Weekly payouts'], cta: 'Become a Creator', hot: true },
+  { name: 'GlowX Enterprise', fee: 'Custom', tag: 'For agencies & top creators', desc: 'Tailored solutions for top-tier creators and agencies.', features: ['Everything in Pro', 'Dedicated account manager', 'White-label options', 'Custom API integrations', 'Daily payouts'], cta: 'Contact Us', hot: false },
 ]
 
-export default function HomePage(){
-  const [heroIdx, setHeroIdx] = useState(0)
-  const [followed, setFollowed] = useState<Set<string>>(new Set())
-  const [sPage, setSPage] = useState(0)
-  const featRef = useRef<HTMLDivElement>(null)
-  const totalPages = Math.ceil(suggestedCreators.length/3)
-
-  // Hero rotation every 6s
-  useEffect(()=>{
-    const id = setInterval(()=> setHeroIdx(i => (i+1)%HERO_VIDEOS.length), 6000)
-    return ()=> clearInterval(id)
-  },[])
-
-  // Pause when tab hidden
-  useEffect(()=>{
-    const handler = ()=>{ /* videos will auto pause via browser */ }
-    document.addEventListener('visibilitychange', handler)
-    return ()=> document.removeEventListener('visibilitychange', handler)
-  },[])
-
-  const toggleFollow = (handle:string)=>{
-    setFollowed(prev=>{
-      const n = new Set(prev)
-      if(n.has(handle)) n.delete(handle)
-      else n.add(handle)
-      // TODO: CALL YOUR BACKEND API HERE
-      // fetch('/api/follow', {method:'POST', body: JSON.stringify({handle, following: n.has(handle)})})
-      return n
-    })
-  }
-
+export default function LandingPage() {
   return (
-    <>
-      <style>{`
-        :root{--primary:#FF2E93;--secondary:#7B3FF2;--tint:#FFE3F0;--text:#2A1030;--text2:#7A6680;--bg:#FFF7FA;--shadow:0 8px 32px rgba(255,46,147,0.12)}
-        .page{max-width:1440px;margin:0 auto;padding:24px;display:flex;gap:24px}
-        .main-col{flex:1;min-width:0;width:70%}
-        .side-col{width:30%;max-width:340px;position:sticky;top:24px}
-        @media(max-width:1024px){.page{flex-direction:column}.main-col{width:100%}.side-col{width:100%;max-width:100%;position:static}}
-        .hero{height:70vh;min-height:460px;border-radius:24px;overflow:hidden;position:relative;background:#FFE9F3;display:grid;place-items:center}
-        .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s}
-        .hero video.active{opacity:1}
-        .hero-grad{position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to top, var(--bg) 8%, transparent);z-index:1}
-        .hero-content{position:relative;z-index:2;text-align:center}
-        .hero-h1{font-size:clamp(32px,5vw,52px);font-weight:800;color:var(--text)}
-        .hero-cta{display:inline-flex;height:52px;padding:0 28px;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:white;font-weight:700;margin-top:16px}
-        .dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3}
-        .dot{width:8px;height:8px;border-radius:50%;background:rgba(42,16,48,.2);cursor:pointer}
-        .dot.active{background:var(--primary);width:24px}
-        .feat-track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px}
-        .feat-card{width:270px;height:430px;flex-shrink:0;border-radius:24px;overflow:hidden;position:relative;background:#2A1030}
-        .feat-card img{width:100%;height:100%;object-fit:cover}
-        .feat-grad{position:absolute;inset:0;background:linear-gradient(to top,#2A1030 0%,transparent 65%)}
-        .feat-info{position:absolute;left:16px;bottom:16px}
-        .feat-name{color:white;font-weight:800;text-transform:uppercase}
-        .feat-title{color:#FF8CC6;font-style:italic;font-size:13px}
-        .empty{padding:80px 24px;display:flex;flex-direction:column;align-items:center;background:white;border-radius:24px;border:1px dashed #F1C8DC;margin-top:24px;text-align:center}
-        .x3d{width:120px;height:120px;position:relative;margin-bottom:24px;animation:float 3.2s ease-in-out infinite}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        .x-bar{position:absolute;left:50%;top:50%;width:28px;height:120px;border-radius:20px;background:linear-gradient(180deg,#FF5DB4,#FF2E93 45%,#E6006E)}
-        .x-bar:first-child{transform:translate(-50%,-50%) rotate(45deg)}
-        .x-bar:last-child{transform:translate(-50%,-50%) rotate(-45deg)}
-        .s-card{height:130px;border-radius:16px;overflow:hidden;position:relative;background:#2A1030;margin-bottom:12px}
-        .s-card img.banner{width:100%;height:100%;object-fit:cover}
-        .s-grad{position:absolute;inset:0;background:linear-gradient(90deg,rgba(42,16,48,.75),rgba(42,16,48,.2) 60%)}
-        .s-avatar{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:64px;height:64px;border-radius:50%;border:3px solid var(--primary)}
-        .s-info{position:absolute;left:92px;top:50%;transform:translateY(-50%)}
-        .s-name{color:white;font-weight:700;font-size:14px}
-        .s-handle{color:rgba(255,255,255,.7);font-size:12px}
-        .follow{position:absolute;right:10px;top:10px;height:32px;padding:0 14px;border-radius:999px;background:white;color:var(--primary);font-weight:700;font-size:12px}
-      `}</style>
-
-      <div className="min-h-screen bg-[#FFF7FA]">
-        <div className="page">
-          <div className="main-col">
-            {/* HERO */}
-            <div className="hero">
-              {HERO_VIDEOS.map((v,i)=>(
-                <video key={i} className={i===heroIdx?'active':''} autoPlay muted loop playsInline poster={v.poster} src={v.src} />
-              ))}
-              <div className="hero-grad" />
-              <div className="hero-content">
-                <h1 className="hero-h1">[YOUR HEADLINE]</h1>
-                <a href="#" className="hero-cta">[BUTTON TEXT]</a>
-              </div>
-              <div className="dots">
-                {HERO_VIDEOS.map((_,i)=>(
-                  <div key={i} onClick={()=>setHeroIdx(i)} className={`dot ${i===heroIdx?'active':''}`} />
-                ))}
-              </div>
-            </div>
-
-            {/* FEATURED */}
-            <div className="mt-8">
-              <h3 className="font-extrabold text-xl mb-3">Featured Creators</h3>
-              <div className="feat-track" ref={featRef}>
-                {featuredCreators.map(c=>(
-                  <div key={c.handle} className="feat-card">
-                    <img src={c.image} alt={c.name} />
-                    <div className="feat-grad" />
-                    <div className="feat-info">
-                      <div className="feat-name">{c.name}</div>
-                      <div className="feat-title">{c.title}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* EMPTY FEED */}
-            {followed.size===0 && (
-              <div className="empty">
-                <div className="x3d"><div className="x-bar" /><div className="x-bar" /></div>
-                <h3 className="font-extrabold text-[28px]">Create your feed</h3>
-                <p className="text-[#7A6680] max-w-[340px] text-sm mt-2">Start following or subscribing to creators to fill your feed with content</p>
-                <a href="#" className="mt-5 h-12 px-6 rounded-full bg-[#2A1030] text-white font-bold grid place-items-center hover:bg-[#FF2E93] transition">Discover Creators</a>
-              </div>
-            )}
-          </div>
-
-          <div className="side-col">
-            <h3 className="font-extrabold text-lg mb-3">Suggested Creators</h3>
-            {suggestedCreators.slice(sPage*3, sPage*3+3).map(c=>{
-              const isFollowing = followed.has(c.handle)
-              return (
-                <div key={c.handle} className="s-card">
-                  <img className="banner" src={c.banner} alt="" />
-                  <div className="s-grad" />
-                  <img className="s-avatar" src={c.avatar} alt={c.name} />
-                  <div className="s-info">
-                    <div className="s-name">{c.name}</div>
-                    <div className="s-handle">{c.handle}</div>
-                  </div>
-                  <button onClick={()=>toggleFollow(c.handle)} className="follow">
-                    {isFollowing?'Following':'Follow'}
-                  </button>
-                </div>
-              )
-            })}
-            <div className="flex items-center justify-center gap-3 mt-3">
-              <button onClick={()=>setSPage(p=> (p-1+Math.ceil(suggestedCreators.length/3))%Math.ceil(suggestedCreators.length/3))} className="w-8 h-8 rounded-full bg-white border grid place-items-center">‹</button>
-              <div className="flex gap-1">
-                {Array.from({length: Math.ceil(suggestedCreators.length/3)}).map((_,i)=>(
-                  <div key={i} className={`w-1.5 h-1.5 rounded-full ${i===sPage?'bg-[#FF2E93] w-4':'bg-[#E8D5E0]'}`} />
-                ))}
-              </div>
-              <button onClick={()=>setSPage(p=> (p+1)%Math.ceil(suggestedCreators.length/3))} className="w-8 h-8 rounded-full bg-white border grid place-items-center">›</button>
-            </div>
+    <div className="min-h-screen bg-[#0A0A0F] text-white overflow-x-hidden">
+      {/* HEADER */}
+      <header className="fixed top-0 inset-x-0 z-50 border-b border-white/10 bg-[#0A0A0F]/80 backdrop-blur-xl">
+        <div className="max-w-[1200px] mx-auto px-5 h-16 flex items-center justify-between">
+          <a href="/"><GlowXLogo size={30} /></a>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-white/70">
+            <a href="#features" className="hover:text-white transition">Features</a>
+            <a href="#creators" className="hover:text-white transition">Creators</a>
+            <a href="#pricing" className="hover:text-white transition">Pricing</a>
+          </nav>
+          <div className="flex items-center gap-3">
+            <a href="/home" className="hidden sm:inline-block text-sm font-semibold text-white/80 hover:text-white transition">Sign in</a>
+            <a href="/onboarding" className="glow-gradient text-sm font-bold px-5 py-2.5 rounded-full shadow-lg shadow-purple-500/25 hover:scale-105 transition-transform">Become a creator</a>
           </div>
         </div>
-      </div>
-    </>
+      </header>
+
+      {/* HERO */}
+      <section className="relative min-h-screen flex items-center justify-center pt-16">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-purple-600/20 blur-[120px] animate-float" />
+          <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-pink-500/20 blur-[100px] animate-float-delayed" />
+          <div className="absolute bottom-1/4 left-1/3 w-[350px] h-[350px] rounded-full bg-cyan-500/10 blur-[80px] animate-float" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A0A0F]" />
+        </div>
+        <div className="relative z-10 max-w-[900px] mx-auto px-5 text-center">
+          <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 text-sm text-white/70">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            The creator-first monetisation platform
+          </div>
+          <h1 className="animate-fade-up-1 text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6">
+            Illuminate Your Content.<br />
+            <span className="text-glow-gradient">Ignite Your Empire.</span>
+          </h1>
+          <p className="animate-fade-up-2 text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10">
+            GlowX gives creators the tools to earn on their own terms — subscriptions, pay-per-view, AI personas and direct fan connection, all in one place.
+          </p>
+          <div className="animate-fade-up-3 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/onboarding" className="glow-gradient px-8 py-4 rounded-full font-bold shadow-lg shadow-purple-500/30 hover:shadow-pink-500/40 hover:scale-105 transition-all">
+              Start Creating on GlowX
+            </a>
+            <a href="/home" className="glass-card px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition">
+              Explore Creators
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <section id="features" className="py-24 sm:py-32">
+        <div className="max-w-[1200px] mx-auto px-5">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+              Everything You Need to <span className="text-glow-gradient">Build Your Empire</span>
+            </h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">Powerful tools designed to help you create, grow and monetise your content.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURES.map(f => (
+              <div key={f.title} className="group relative rounded-2xl p-6 glass-card glow-border hover:bg-white/[0.08] transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl glow-gradient flex items-center justify-center mb-4 shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={f.icon} /></svg>
+                </div>
+                <h3 className="text-lg font-bold mb-2">{f.title}</h3>
+                <p className="text-sm text-white/55 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CREATORS */}
+      <section id="creators" className="py-24 sm:py-32 relative">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-pink-600/10 blur-[120px]" />
+        <div className="max-w-[1200px] mx-auto px-5">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+              Made for Creators. <span className="text-glow-gradient">Trusted by Icons.</span>
+            </h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">From athletes to AI influencers — GlowX is built for anyone with an audience.</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {CREATORS.map(c => (
+              <div key={c.name} className="group relative h-[380px] rounded-3xl overflow-hidden glow-border">
+                <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <div className="font-extrabold uppercase tracking-wide">{c.name}</div>
+                  <div className="text-pink-400 italic text-sm">{c.title}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section id="pricing" className="py-24 sm:py-32">
+        <div className="max-w-[1200px] mx-auto px-5">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+              Transparent Pricing. <span className="text-glow-gradient">You Keep More.</span>
+            </h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">No hidden cuts. Pick the plan that matches where you are — upgrade when you grow.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            {PLANS.map(p => (
+              <div key={p.name} className={`relative rounded-3xl p-8 flex flex-col ${p.hot ? 'glow-gradient shadow-2xl shadow-purple-500/30 md:-translate-y-3' : 'glass-card glow-border'}`}>
+                {p.hot && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-[#0A0A0F] text-xs font-extrabold px-4 py-1 rounded-full">MOST POPULAR</div>}
+                <h3 className="text-xl font-extrabold">{p.name}</h3>
+                <div className="mt-4 flex items-baseline gap-2">
+                  <span className="text-4xl font-extrabold">{p.fee}</span>
+                  <span className={`text-sm ${p.hot ? 'text-white/80' : 'text-white/50'}`}>platform fee</span>
+                </div>
+                <div className={`text-sm font-bold mt-1 ${p.hot ? 'text-white' : 'text-glow-gradient'}`}>{p.tag}</div>
+                <p className={`text-sm mt-3 ${p.hot ? 'text-white/85' : 'text-white/55'}`}>{p.desc}</p>
+                <ul className={`mt-6 space-y-3 text-sm flex-1 ${p.hot ? 'text-white/90' : 'text-white/65'}`}>
+                  {p.features.map(f => (
+                    <li key={f} className="flex gap-2.5">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><path d="M20 6L9 17l-5-5" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <a href="/onboarding" className={`mt-8 h-12 rounded-full font-bold grid place-items-center transition ${p.hot ? 'bg-white text-[#0A0A0F] hover:scale-[1.03]' : 'glow-gradient text-white hover:scale-[1.03]'}`}>
+                  {p.cta}
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-24 sm:py-32 relative">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-purple-600/20 blur-[140px]" />
+        </div>
+        <div className="relative max-w-[800px] mx-auto px-5 text-center">
+          <GlowXLogo size={64} withWordmark={false} />
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mt-8 mb-6">
+            Ready to <span className="text-glow-gradient">Glow</span>?
+          </h2>
+          <p className="text-white/60 text-lg mb-10">Set up your creator profile in minutes and start building your empire today.</p>
+          <a href="/onboarding" className="glow-gradient inline-block px-10 py-4 rounded-full font-bold text-lg shadow-lg shadow-purple-500/30 hover:scale-105 transition-transform">
+            Become a Creator
+          </a>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-white/10 py-12">
+        <div className="max-w-[1200px] mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <GlowXLogo size={26} />
+          <p className="text-white/40 text-sm text-center">Illuminate Your Content. Ignite Your Empire.</p>
+          <div className="flex items-center gap-6 text-sm text-white/50">
+            <a href="/home" className="hover:text-white transition">Explore</a>
+            <a href="/upload" className="hover:text-white transition">Upload</a>
+            <a href="/builder" className="hover:text-white transition">Persona Studio</a>
+          </div>
+        </div>
+        <p className="text-center text-white/25 text-xs mt-8">© {new Date().getFullYear()} GlowX. All rights reserved.</p>
+      </footer>
+    </div>
   )
 }

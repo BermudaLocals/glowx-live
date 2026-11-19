@@ -1,12 +1,13 @@
 'use client'
 import { useState, useRef } from 'react'
+import GlowXLogo from '../components/GlowXLogo'
 
 const SLIDES = [
-  {headline:"Top creators earn over $10,000 per month", emoji:"💰💰💰"},
+  {headline:"Turn your content into monthly income", emoji:"💰💰💰"},
   {headline:"One platform. Built to make creators money", emoji:"🌍"},
-  {headline:"Keep 90% from day one. 92% after your first week", emoji:"🪙"},
+  {headline:"Keep 95% from day one. 97% on Pro", emoji:"🪙"},
   {headline:"Analytics built to grow your income", emoji:"📊"},
-  {headline:"Refer a creator. Earn 10% of their income", emoji:"🥧"},
+  {headline:"Refer a creator. Earn when they earn", emoji:"🥧"},
   {headline:"Verified fast. Earning faster", emoji:"✅"},
 ]
 
@@ -19,7 +20,7 @@ export default function OnboardingFixed(){
     <div className="min-h-screen bg-gradient-to-b from-[#FFF7FA] to-[#FFE3F0] flex items-center justify-center p-4 relative">
       <div className="w-full max-w-[512px] min-h-[85vh] flex flex-col justify-between bg-white/60 backdrop-blur rounded-[32px] p-8 shadow-xl border border-white">
         <div>
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF2E93] to-[#7B3FF2] grid place-items-center text-white font-extrabold mx-auto mb-8">G</div>
+          <div className="mx-auto mb-8 w-fit"><GlowXLogo size={52} withWordmark={false} /></div>
           
           <div className="overflow-hidden">
             <div className="flex transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" style={{transform:`translateX(-${idx*100}%)`}}>
@@ -42,8 +43,8 @@ export default function OnboardingFixed(){
         </div>
 
         <div className="mt-8">
-          <p className="text-[11px] text-[#7A6680] text-center mb-4">By becoming a creator on [BRAND] you reconfirm your agreement to our <a className="underline" href="#">Terms</a>, <a className="underline" href="#">Acceptable Use</a>, and <a className="underline" href="#">Privacy</a></p>
-          <a href="/home" className="w-full h-14 rounded-full bg-gradient-to-r from-[#FF2E93] to-[#7B3FF2] text-white font-bold grid place-items-center shadow-lg hover:translate-y-[-2px] transition">Start earning</a>
+          <p className="text-[11px] text-[#7A6680] text-center mb-4">By becoming a creator on GlowX you reconfirm your agreement to our <a className="underline" href="#">Terms</a>, <a className="underline" href="#">Acceptable Use</a>, and <a className="underline" href="#">Privacy</a></p>
+          <a href="/home" className="w-full h-14 rounded-full glow-gradient text-white font-bold grid place-items-center shadow-lg hover:translate-y-[-2px] transition">Start earning</a>
           <a href="/home" className="block text-center text-[13px] text-[#7A6680] mt-3 hover:text-black">Close</a>
         </div>
       </div>

@@ -1,7 +1,75 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --gx-purple: #7C3AED;
+  --gx-pink: #EC4899;
+  --gx-coral: #FF6B6B;
+  --gx-amber: #FBBF24;
+  --gx-cyan: #06B6D4;
+  --gx-void: #0A0A0F;
+  --gx-ink: #2A1030;
+  --gx-blush: #FFF7FA;
+}
+
 * { scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { display: none; }
-body { background:#000; color:#fff; }
+
+body {
+  background: var(--gx-void);
+  color: #fff;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* GlowX brand utilities */
+.glow-gradient { background: linear-gradient(135deg, #7C3AED, #EC4899); }
+.glow-gradient-secondary { background: linear-gradient(135deg, #FF6B6B, #FBBF24); }
+.text-glow-gradient {
+  background: linear-gradient(135deg, #7C3AED, #EC4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.glow-border { position: relative; }
+.glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(124,58,237,.6), rgba(236,72,153,.6));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+.glow-border:hover::before { opacity: 1; }
+
+@keyframes gx-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.05); }
+}
+@keyframes gx-float-delayed {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-25px, 15px) scale(1.08); }
+}
+@keyframes gx-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-float { animation: gx-float 8s ease-in-out infinite; }
+.animate-float-delayed { animation: gx-float-delayed 10s ease-in-out infinite; }
+.animate-fade-up { animation: gx-fade-up .7s ease-out both; }
+.animate-fade-up-1 { animation: gx-fade-up .7s .1s ease-out both; }
+.animate-fade-up-2 { animation: gx-fade-up .7s .2s ease-out both; }
+.animate-fade-up-3 { animation: gx-fade-up .7s .3s ease-out both; }
