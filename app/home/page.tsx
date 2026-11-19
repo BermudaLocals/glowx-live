@@ -27,12 +27,21 @@ export default function HomeFixed(){
   const [sPage, setSPage] = useState(0)
   const [followed, setFollowed] = useState<Set<string>>(new Set())
   const [posts, setPosts] = useState<Post[]>([])
+  const [isLive, setIsLive] = useState(false)
   const featRef = useRef<HTMLDivElement>(null)
   const totalSPages = Math.ceil(suggested.length/3)
 
   // Load real posts from the platform
   useEffect(()=>{
     fetch('/api/posts').then(r=>r.json()).then(d=>setPosts(d.posts||[])).catch(()=>{})
+  },[])
+
+  // Poll live-stream status
+  useEffect(()=>{
+    const tick = ()=> fetch('/api/live/status').then(r=>r.json()).then(d=>setIsLive(!!d.live)).catch(()=>{})
+    tick()
+    const id = setInterval(tick, 15000)
+    return ()=> clearInterval(id)
   },[])
 
   // Hero rotates every 6s
@@ -89,6 +98,10 @@ export default function HomeFixed(){
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-[22px] font-bold">Home</h1>
           <div className="flex items-center gap-3">
+            <a href="/live" className={`h-9 px-4 rounded-full flex items-center gap-2 text-sm font-extrabold transition ${isLive?'bg-red-600 text-white shadow-lg shadow-red-600/30':'bg-white border border-[#F1E6EF] text-[#7A6680]'}`}>
+              {isLive && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
+              {isLive ? 'LIVE NOW' : 'Live'}
+            </a>
             <div className="h-9 px-4 rounded-full bg-white border border-[#F1E6EF] flex items-center gap-2 text-sm font-semibold shadow-sm">0.00 <span className="text-[10px]">💲</span></div>
             <button className="w-9 h-9 rounded-full bg-white border border-[#F1E6EF] grid place-items-center">💬</button>
             <button className="w-9 h-9 rounded-full bg-white border border-[#F1E6EF] grid place-items-center">🔔</button>

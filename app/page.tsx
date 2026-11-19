@@ -180,6 +180,7 @@ export default function LandingPage() {
           <GlowXLogo size={26} />
           <p className="text-white/40 text-sm text-center">Illuminate Your Content. Ignite Your Empire.</p>
           <div className="flex items-center gap-6 text-sm text-white/50">
+            <a href="/live" className="hover:text-white transition">Live</a>
             <a href="/home" className="hover:text-white transition">Explore</a>
             <a href="/upload" className="hover:text-white transition">Upload</a>
             <a href="/builder" className="hover:text-white transition">Persona Studio</a>
